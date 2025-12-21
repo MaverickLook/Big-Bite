@@ -1,0 +1,81 @@
+.current-order-status {
+  margin-bottom: 2rem;
+}
+
+.current-order-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #ff6b35;
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.order-card-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.order-card-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.order-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.order-card-id {
+  font-weight: 600;
+  color: #ff6b35;
+  font-family: monospace;
+  font-size: 1rem;
+}
+
+.order-card-message {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.btn-view-order {
+  padding: 0.75rem 1.5rem;
+  background: #ff6b35;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-view-order:hover {
+  background: #e55a2b;
+  transform: translateX(2px);
+}
+
+@media (max-width: 768px) {
+  .order-card-body {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .btn-view-order {
+    width: 100%;
+    text-align: center;
+  }
+}
+

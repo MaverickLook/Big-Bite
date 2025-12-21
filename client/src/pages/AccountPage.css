@@ -1,0 +1,138 @@
+.account-page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.account-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.account-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.account-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.account-card-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.profile-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.profile-row {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.profile-label {
+  color: #666;
+  font-weight: 600;
+}
+
+.profile-value {
+  color: #333;
+  word-break: break-word;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.order-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.order-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.order-id {
+  font-family: monospace;
+  font-weight: 700;
+  color: #ff6b35;
+}
+
+.order-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.order-meta .dot {
+  opacity: 0.6;
+}
+
+.order-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-small {
+  padding: 0.5rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+.account-empty {
+  color: #666;
+  padding: 0.75rem;
+}
+
+.account-error {
+  background: #ffebee;
+  color: #c62828;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border-left: 4px solid #c62828;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .profile-row {
+    grid-template-columns: 1fr;
+  }
+
+  .order-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .order-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+

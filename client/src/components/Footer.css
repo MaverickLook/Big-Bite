@@ -1,0 +1,158 @@
+.footer {
+  background-color: #111111;
+  color: #ffffff;
+  padding: 2.5rem 2.25rem;
+  margin-top: 0;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+/* Left Column - Logo */
+.footer-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.footer-logo-img {
+  height: 150px;
+  width: auto;
+  display: block;
+  max-width: 100%;
+}
+
+/* Center Column - Navigation */
+.footer-nav {
+  display: flex;
+  gap: 2.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-link {
+  background: none;
+  border: none;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease-out;
+  font-family: inherit;
+}
+
+.footer-link:hover {
+  color: #ff6b35;
+}
+
+.footer-link:visited {
+  color: #ffffff;
+}
+
+.footer-link:visited:hover {
+  color: #ff6b35;
+}
+
+/* Right Column - Contact Info */
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: left;
+  justify-self: end;
+}
+
+.footer-contact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.footer-contact-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #ff6b35;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.footer-contact-value {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .footer {
+    padding: 2rem 1.5rem;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .footer-logo {
+    align-items: center;
+    width: 150%;
+  }
+
+  .footer-logo-img {
+    height: 110px;
+  }
+
+  .footer-nav {
+    width: 100%;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .footer-contact {
+    text-align: center;
+    justify-self: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .footer-content {
+    gap: 1.5rem;
+  }
+
+  .footer-logo-img {
+    height: 85px;
+  }
+
+  .footer-nav {
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-link {
+    font-size: 1rem;
+  }
+
+  .footer-contact-label {
+    font-size: 0.85rem;
+  }
+
+  .footer-contact-value {
+    font-size: 0.9rem;
+  }
+}
