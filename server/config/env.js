@@ -31,6 +31,7 @@ console.log("MONGO_URI:", MONGO_URI ? "✓" : "✗");
 console.log("JWT_SECRET:", JWT_SECRET ? "✓" : "✗");
 console.log("GOOGLE_CLIENT_ID:", GOOGLE_CLIENT_ID ? "✓" : "✗");
 console.log("GOOGLE_CLIENT_SECRET:", GOOGLE_CLIENT_SECRET ? "✓" : "✗");
+console.log("GOOGLE_CALLBACK_URL:", GOOGLE_CALLBACK_URL ? "✓" : "✗");
 console.log("CLIENT_URL:", CLIENT_URL ? "✓" : "✗");
 console.log("EMAIL_HOST:", EMAIL_HOST ? "✓" : "✗");
 console.log("EMAIL_PORT:", EMAIL_PORT ? "✓" : "✗");
