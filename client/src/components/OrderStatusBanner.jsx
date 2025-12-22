@@ -10,8 +10,6 @@ const OrderStatusBanner = () => {
   const [activeOrders, setActiveOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [showGuestPrompt, setShowGuestPrompt] = useState(false);
-  const [guestOrderId, setGuestOrderId] = useState('');
 
   const fetchCurrentOrder = useCallback(async ({ silent = false } = {}) => {
     try {
@@ -72,25 +70,6 @@ const OrderStatusBanner = () => {
     sessionStorage.setItem('orderBannerCollapsed', 'false');
   };
 
-  const handleTrackOrder = () => {
-    const top = activeOrders[0];
-    if (top) {
-      navigate(`/order/${top._id}`);
-    }
-  };
-
-  const handleGuestTrackOrder = async () => {
-    if (guestOrderId.trim()) {
-      try {
-        // Validate order exists
-        await api.get(`/orders/${guestOrderId.trim()}`);
-        navigate(`/order/${guestOrderId.trim()}`);
-      } catch (error) {
-        alert('Order not found. Please check your order ID.');
-      }
-    }
-  };
-
   const getEstimatedDelivery = (order) => {
     if (!order) return null;
     
@@ -137,72 +116,6 @@ const OrderStatusBanner = () => {
     return null;
   }
 
-  // Guest user - show prompt
-  if (!isAuthenticated) {
-    return (
-      <div className="order-banner guest-banner">
-        <div className="order-banner-container">
-          <div className="order-banner-content">
-            <div className="order-banner-icon">📦</div>
-            <div className="order-banner-info">
-              <div className="order-banner-title">Track Your Order</div>
-              <div className="order-banner-subtitle">
-                {showGuestPrompt ? 'Enter your order ID to track' : 'Have an existing order?'}
-              </div>
-            </div>
-          </div>
-          
-          {showGuestPrompt ? (
-            <div className="guest-track-form">
-              <input
-                type="text"
-                className="guest-order-input"
-                placeholder="Enter Order ID"
-                value={guestOrderId}
-                onChange={(e) => setGuestOrderId(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleGuestTrackOrder()}
-              />
-              <button 
-                className="btn-banner-action" 
-                onClick={handleGuestTrackOrder}
-              >
-                Track
-              </button>
-              <button 
-                className="btn-banner-secondary" 
-                onClick={() => setShowGuestPrompt(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          ) : (
-            <div className="order-banner-actions">
-              <button 
-                className="btn-banner-action" 
-                onClick={() => setShowGuestPrompt(true)}
-              >
-                Track Order
-              </button>
-              <button 
-                className="btn-banner-secondary" 
-                onClick={() => navigate('/login')}
-              >
-                Sign In
-              </button>
-              <button 
-                className="btn-banner-dismiss" 
-                onClick={() => setShowGuestPrompt(false)}
-                aria-label="Close"
-              >
-                ✕
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
   // No active order for authenticated user
   if (activeOrders.length === 0) {
     return null;
@@ -221,7 +134,7 @@ const OrderStatusBanner = () => {
         onClick={handleExpand}
         role="button"
         tabIndex={0}
-        onKeyPress={(e) => e.key === 'Enter' && handleExpand()}
+        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleExpand()}
         aria-label="Expand order status"
       >
         <div className="order-banner-container-collapsed">
@@ -294,7 +207,7 @@ const OrderStatusBanner = () => {
           aria-label="Collapse"
           title="Minimize banner"
         >
-          ▼
+          ▲
         </button>
       </div>
     </div>
