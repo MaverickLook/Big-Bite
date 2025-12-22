@@ -294,13 +294,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.3rem;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
   margin-left: 1.2rem;
   opacity: 0.85;
   transition: opacity 0.2s ease-out, transform 0.2s ease-out;
   text-decoration: none;
   padding: 0.5rem;
+  color: #FFFFFF;
 }
 
 .download-pdf-btn:hover {

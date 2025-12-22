@@ -34,7 +34,7 @@ const Navbar = () => {
           className="download-pdf-btn"
           title="Download Project PDF"
         >
-          📥
+          文件説明
         </a>
       </div>
 
