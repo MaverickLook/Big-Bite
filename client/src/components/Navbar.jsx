@@ -30,7 +30,7 @@ const Navbar = () => {
         </Link>
         <a 
           href="/01157161+01157155.pdf" 
-          download="Big-Bite-Project.pdf"
+          download="01157161+01157155.pdf"
           className="download-pdf-btn"
           title="Download Project PDF"
         >
