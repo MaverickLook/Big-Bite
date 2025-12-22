@@ -42,6 +42,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 1.5rem;
+  position: relative;
 }
 
 /* Collapsed State Styles */
@@ -253,6 +254,19 @@
   transform: translateY(-2px);
 }
 
+/* Bottom-center variant for expanded banner */
+.btn-banner-collapse.bottom-center {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  height: auto;
+  padding: 0.4rem 0.75rem;
+  border-radius: 16px;
+  font-weight: 600;
+}
+
 /* Guest Banner Variant */
 .guest-banner {
   background: linear-gradient(135deg, #ff6b35 0%, #e55a2b 100%);
@@ -459,6 +473,91 @@
   }
   50% {
     box-shadow: 0 4px 12px rgba(6, 193, 103, 0.3);
+  }
+}
+
+/* Stacked orders list */
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+.order-item + .order-item {
+  margin-top: 0.25rem;
+}
+
+.order-item-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.order-item-icon {
+  font-size: 1.25rem;
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+}
+
+.order-item-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-item-id {
+  font-weight: 700;
+}
+
+.order-item-status {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  opacity: 0.95;
+}
+
+.order-item-actions {
+  display: flex;
+  align-items: center;
+}
+
+.btn-item-track {
+  background: white;
+  color: #06c167;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-item-track:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+  .btn-banner-collapse.bottom-center {
+    bottom: 6px;
+  }
+
+  .order-item {
+    padding: 0.6rem 0.75rem;
   }
 }
 

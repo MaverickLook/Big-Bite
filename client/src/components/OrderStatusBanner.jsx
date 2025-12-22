@@ -7,7 +7,7 @@ import './OrderStatusBanner.css';
 const OrderStatusBanner = () => {
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const [currentOrder, setCurrentOrder] = useState(null);
+  const [activeOrders, setActiveOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
@@ -28,12 +28,12 @@ const OrderStatusBanner = () => {
       const response = await api.get(`/orders/user/${userId}`);
       const orders = response.data || [];
 
-      // Find the most recent active order
-      const activeOrder = orders
+      // Collect all active orders and sort newest first
+      const allActive = orders
         .filter(o => o.status !== 'completed' && o.status !== 'cancelled')
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-      setCurrentOrder(activeOrder || null);
+      setActiveOrders(allActive);
     } catch (error) {
       if (!silent) {
         console.error('Error fetching current order:', error);
@@ -132,7 +132,7 @@ const OrderStatusBanner = () => {
   };
 
   // Don't show if loading without data
-  if (isLoading && !currentOrder) {
+  if (isLoading && activeOrders.length === 0) {
     return null;
   }
 
@@ -203,13 +203,14 @@ const OrderStatusBanner = () => {
   }
 
   // No active order for authenticated user
-  if (!currentOrder) {
+  if (activeOrders.length === 0) {
     return null;
   }
 
   // Show active order banner
-  const orderIdDisplay = `#${currentOrder._id.toString().slice(-8).toUpperCase()}`;
-  const estimatedDelivery = getEstimatedDelivery(currentOrder);
+  const topOrder = activeOrders[0];
+  const orderIdDisplay = `#${topOrder._id.toString().slice(-8).toUpperCase()}`;
+  const estimatedDelivery = getEstimatedDelivery(topOrder);
 
   // Collapsed state - minimal banner
   if (isCollapsed) {
@@ -224,12 +225,12 @@ const OrderStatusBanner = () => {
       >
         <div className="order-banner-container-collapsed">
           <div className="order-banner-icon-small">
-            {getStatusIcon(currentOrder.status)}
+            {getStatusIcon(topOrder.status)}
           </div>
           <div className="order-banner-info-collapsed">
             <span className="order-id-collapsed">{orderIdDisplay}</span>
             <span className="status-dot">•</span>
-            <span className="status-text-collapsed">{getStatusText(currentOrder.status)}</span>
+            <span className="status-text-collapsed">{getStatusText(topOrder.status)}</span>
           </div>
           <div className="expand-icon">▼</div>
         </div>
@@ -243,37 +244,57 @@ const OrderStatusBanner = () => {
       <div className="order-banner-container">
         <div className="order-banner-content">
           <div className="order-banner-icon pulse">
-            {getStatusIcon(currentOrder.status)}
+            {getStatusIcon(topOrder.status)}
           </div>
           <div className="order-banner-info">
             <div className="order-banner-title">
-              Order {orderIdDisplay}
+              Active Orders
             </div>
             <div className="order-banner-status">
-              <span className="status-text">{getStatusText(currentOrder.status)}</span>
-              {estimatedDelivery && (
-                <span className="delivery-time">• Est. {estimatedDelivery}</span>
-              )}
+              <span className="status-text">Newest on top</span>
             </div>
           </div>
         </div>
         
-        <div className="order-banner-actions">
-          <button 
-            className="btn-banner-track" 
-            onClick={handleTrackOrder}
-          >
-            Track Order →
-          </button>
-          <button 
-            className="btn-banner-collapse" 
-            onClick={handleCollapse}
-            aria-label="Collapse"
-            title="Minimize banner"
-          >
-            ▲
-          </button>
+        {/* Stacked orders list */}
+        <div className="order-list">
+          {activeOrders.map((order) => {
+            const idDisplay = `#${order._id.toString().slice(-8).toUpperCase()}`;
+            const est = getEstimatedDelivery(order);
+            return (
+              <div className="order-item" key={order._id}>
+                <div className="order-item-left">
+                  <div className="order-item-icon">{getStatusIcon(order.status)}</div>
+                  <div className="order-item-info">
+                    <div className="order-item-id">{idDisplay}</div>
+                    <div className="order-item-status">
+                      <span className="order-item-status-text">{getStatusText(order.status)}</span>
+                      {est && <span className="order-item-delivery">• Est. {est}</span>}
+                    </div>
+                  </div>
+                </div>
+                <div className="order-item-actions">
+                  <button
+                    className="btn-item-track"
+                    onClick={() => navigate(`/order/${order._id}`)}
+                  >
+                    Track →
+                  </button>
+                </div>
+              </div>
+            );
+          })}
         </div>
+        
+        {/* Bottom-center collapse toggle */}
+        <button 
+          className="btn-banner-collapse bottom-center" 
+          onClick={handleCollapse}
+          aria-label="Collapse"
+          title="Minimize banner"
+        >
+          Minimize
+        </button>
       </div>
     </div>
   );
