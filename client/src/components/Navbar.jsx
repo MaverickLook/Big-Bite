@@ -28,6 +28,14 @@ const Navbar = () => {
         <Link to="/" className="logo">
           <img src="/big-bite-logo.png" alt="Big-Bite" className="logo-img" />
         </Link>
+        <a 
+          href="/01157161+01157155.pdf" 
+          download="Big-Bite-Project.pdf"
+          className="download-pdf-btn"
+          title="Download Project PDF"
+        >
+          📥
+        </a>
       </div>
 
       <div className="navbar-center">
