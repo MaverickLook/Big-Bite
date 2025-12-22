@@ -67,9 +67,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      <div className="page-container">
-        <CurrentOrderStatus />
-      </div>
+
     </div>
   );
 };

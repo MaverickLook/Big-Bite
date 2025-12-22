@@ -114,8 +114,7 @@ const MenuPage = () => {
   return (
     <div className="page-container menu-page">
       <div className="menu-header">
-        <h1>🍕 Big-Bite Menu</h1>
-        <p>Delicious food delivered to your door</p>
+        <h1>Big-Bite Menu</h1>
       </div>
 
       {/* Search Bar */}
