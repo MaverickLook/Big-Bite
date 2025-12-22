@@ -3,10 +3,12 @@
   position: sticky;
   top: 70px; /* Below the navbar */
   z-index: 100; /* Below navbar (120) but above content */
-  background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+  background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000);
+  background-size: 200% 100%;
   color: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
+  animation: auroraWave 8s ease-in-out infinite;
 }
 
 .order-banner.expanded {
@@ -586,5 +588,18 @@
   }
   50% {
     box-shadow: 0 3px 10px rgba(6, 193, 103, 0.2);
+  }
+}
+
+/* Aurora borealis animated wave effect */
+@keyframes auroraWave {
+  0% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
+  100% {
+    background-position: 0% center;
   }
 }
