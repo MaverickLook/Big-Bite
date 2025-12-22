@@ -1,12 +1,9 @@
 import dotenv from "dotenv";
-import path from "path";
-import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Load environment variables from .env file
-dotenv.config({ path: path.join(__dirname, "../.env") });
+if (process.env.NODE_ENV !== "production") {
+  // Only load local .env in development
+  dotenv.config();
+}
 
 // Export environment variables (with sensible defaults where safe)
 export const PORT = process.env.PORT || 5000;
