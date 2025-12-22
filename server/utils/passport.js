@@ -18,9 +18,7 @@ console.log("GOOGLE_CLIENT_ID:", GOOGLE_CLIENT_ID ? "Present" : "Missing");
 console.log("GOOGLE_CLIENT_SECRET:", GOOGLE_CLIENT_SECRET ? "Present" : "Missing");
 
 // Compute callback URL with fallback to localhost:PORT if not provided
-const derivedCallbackUrl =
-  GOOGLE_CALLBACK_URL ||
-  `http://localhost:${PORT || 5000}/api/auth/google/callback`;
+const derivedCallbackUrl = GOOGLE_CALLBACK_URL;
 
 if (!GOOGLE_CALLBACK_URL) {
   console.warn(
