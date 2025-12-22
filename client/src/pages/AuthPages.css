@@ -143,6 +143,11 @@
   color: white;
   cursor: pointer;
   transition: background 0.25s ease;
+  display: inline-block;
+  text-decoration: none;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .auth-btn:hover {
