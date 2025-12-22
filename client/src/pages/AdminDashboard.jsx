@@ -8,7 +8,13 @@ const AdminDashboard = () => {
       <aside className="admin-sidebar">
         <h2>Admin Panel</h2>
         <nav className="admin-nav">
-          <NavLink to="/admin-dashboard" end className={({ isActive }) => (isActive ? 'active' : undefined)}>
+          <NavLink
+            to="/admin-dashboard"
+            end
+            title="Dashboard Home"
+            aria-label="Dashboard Home"
+            className={({ isActive }) => (isActive ? 'active' : undefined)}
+          >
             <span className="nav-icon" aria-hidden="true">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <rect x="3" y="3" width="8" height="8" rx="2"></rect>
@@ -19,7 +25,12 @@ const AdminDashboard = () => {
             </span>
             <span className="nav-label">Dashboard Home</span>
           </NavLink>
-          <NavLink to="/admin-dashboard/menu-management" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+          <NavLink
+            to="/admin-dashboard/menu-management"
+            title="Menu Management"
+            aria-label="Menu Management"
+            className={({ isActive }) => (isActive ? 'active' : undefined)}
+          >
             <span className="nav-icon" aria-hidden="true">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <circle cx="5" cy="6" r="2"></circle>
@@ -32,7 +43,12 @@ const AdminDashboard = () => {
             </span>
             <span className="nav-label">Menu Management</span>
           </NavLink>
-          <NavLink to="/admin-dashboard/orders" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+          <NavLink
+            to="/admin-dashboard/orders"
+            title="Orders"
+            aria-label="Orders"
+            className={({ isActive }) => (isActive ? 'active' : undefined)}
+          >
             <span className="nav-icon" aria-hidden="true">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <rect x="4" y="7" width="16" height="13" rx="2"></rect>
@@ -41,7 +57,12 @@ const AdminDashboard = () => {
             </span>
             <span className="nav-label">Orders</span>
           </NavLink>
-          <NavLink to="/admin-dashboard/analytics" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+          <NavLink
+            to="/admin-dashboard/analytics"
+            title="Analytics"
+            aria-label="Analytics"
+            className={({ isActive }) => (isActive ? 'active' : undefined)}
+          >
             <span className="nav-icon" aria-hidden="true">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <rect x="4" y="10" width="3" height="8" rx="1"></rect>
