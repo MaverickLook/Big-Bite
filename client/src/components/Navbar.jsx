@@ -97,6 +97,7 @@ const Navbar = () => {
               </Link>
             )}
             <Link to="/account" className="user-icon">
+              <span aria-hidden="true" style={{ marginRight: '0.35rem' }}>👤</span>
               {user?.name || 'Account'}
             </Link>
             <button className="logout-btn" onClick={handleLogout}>
