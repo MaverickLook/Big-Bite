@@ -9,7 +9,7 @@ const OrderStatusBanner = () => {
   const navigate = useNavigate();
   const [currentOrder, setCurrentOrder] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isDismissed, setIsDismissed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [showGuestPrompt, setShowGuestPrompt] = useState(false);
   const [guestOrderId, setGuestOrderId] = useState('');
 
@@ -44,11 +44,10 @@ const OrderStatusBanner = () => {
   }, [user]);
 
   useEffect(() => {
-    // Check if banner was dismissed in this session
-    const dismissed = sessionStorage.getItem('orderBannerDismissed');
-    if (dismissed === 'true') {
-      setIsDismissed(true);
-      return;
+    // Check if banner was collapsed in this session
+    const collapsed = sessionStorage.getItem('orderBannerCollapsed');
+    if (collapsed === 'true') {
+      setIsCollapsed(true);
     }
 
     if (isAuthenticated && user?.id) {
@@ -63,9 +62,14 @@ const OrderStatusBanner = () => {
     }
   }, [isAuthenticated, user, fetchCurrentOrder]);
 
-  const handleDismiss = () => {
-    setIsDismissed(true);
-    sessionStorage.setItem('orderBannerDismissed', 'true');
+  const handleCollapse = () => {
+    setIsCollapsed(true);
+    sessionStorage.setItem('orderBannerCollapsed', 'true');
+  };
+
+  const handleExpand = () => {
+    setIsCollapsed(false);
+    sessionStorage.setItem('orderBannerCollapsed', 'false');
   };
 
   const handleTrackOrder = () => {
@@ -127,8 +131,8 @@ const OrderStatusBanner = () => {
     return texts[status] || 'Processing';
   };
 
-  // Don't show if dismissed or loading without data
-  if (isDismissed || (isLoading && !currentOrder)) {
+  // Don't show if loading without data
+  if (isLoading && !currentOrder) {
     return null;
   }
 
@@ -186,8 +190,8 @@ const OrderStatusBanner = () => {
               </button>
               <button 
                 className="btn-banner-dismiss" 
-                onClick={handleDismiss}
-                aria-label="Dismiss"
+                onClick={() => setShowGuestPrompt(false)}
+                aria-label="Close"
               >
                 ✕
               </button>
@@ -207,8 +211,35 @@ const OrderStatusBanner = () => {
   const orderIdDisplay = `#${currentOrder._id.toString().slice(-8).toUpperCase()}`;
   const estimatedDelivery = getEstimatedDelivery(currentOrder);
 
+  // Collapsed state - minimal banner
+  if (isCollapsed) {
+    return (
+      <div 
+        className="order-banner active-order-banner collapsed" 
+        onClick={handleExpand}
+        role="button"
+        tabIndex={0}
+        onKeyPress={(e) => e.key === 'Enter' && handleExpand()}
+        aria-label="Expand order status"
+      >
+        <div className="order-banner-container-collapsed">
+          <div className="order-banner-icon-small">
+            {getStatusIcon(currentOrder.status)}
+          </div>
+          <div className="order-banner-info-collapsed">
+            <span className="order-id-collapsed">{orderIdDisplay}</span>
+            <span className="status-dot">•</span>
+            <span className="status-text-collapsed">{getStatusText(currentOrder.status)}</span>
+          </div>
+          <div className="expand-icon">▼</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Expanded state - full banner
   return (
-    <div className="order-banner active-order-banner">
+    <div className="order-banner active-order-banner expanded">
       <div className="order-banner-container">
         <div className="order-banner-content">
           <div className="order-banner-icon pulse">
@@ -235,11 +266,12 @@ const OrderStatusBanner = () => {
             Track Order →
           </button>
           <button 
-            className="btn-banner-dismiss" 
-            onClick={handleDismiss}
-            aria-label="Dismiss"
+            className="btn-banner-collapse" 
+            onClick={handleCollapse}
+            aria-label="Collapse"
+            title="Minimize banner"
           >
-            ✕
+            ▲
           </button>
         </div>
       </div>

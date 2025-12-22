@@ -6,7 +6,21 @@
   background: linear-gradient(135deg, #06c167 0%, #05a556 100%);
   color: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.order-banner.expanded {
   animation: slideDown 0.3s ease-out;
+}
+
+.order-banner.collapsed {
+  cursor: pointer;
+  padding: 0;
+}
+
+.order-banner.collapsed:hover {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
 }
 
 @keyframes slideDown {
@@ -28,6 +42,67 @@
   justify-content: space-between;
   align-items: center;
   gap: 1.5rem;
+}
+
+/* Collapsed State Styles */
+.order-banner-container-collapsed {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0.65rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.order-banner-icon-small {
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.order-banner.collapsed:hover .order-banner-icon-small {
+  transform: scale(1.1);
+}
+
+.order-banner-info-collapsed {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.order-id-collapsed {
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.status-dot {
+  opacity: 0.7;
+  font-size: 0.7rem;
+}
+
+.status-text-collapsed {
+  opacity: 0.95;
+}
+
+.expand-icon {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  transition: transform 0.3s ease;
+}
+
+.order-banner.collapsed:hover .expand-icon {
+  transform: translateY(2px);
 }
 
 .order-banner-content {
@@ -157,14 +232,14 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
-.btn-banner-dismiss {
+.btn-banner-collapse {
   background: rgba(255, 255, 255, 0.2);
   color: white;
   width: 32px;
   height: 32px;
   border: none;
   border-radius: 50%;
-  font-size: 1.2rem;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
@@ -173,9 +248,9 @@
   line-height: 1;
 }
 
-.btn-banner-dismiss:hover {
+.btn-banner-collapse:hover {
   background: rgba(255, 255, 255, 0.35);
-  transform: rotate(90deg);
+  transform: translateY(-2px);
 }
 
 /* Guest Banner Variant */
@@ -216,10 +291,20 @@
     padding: 1rem 1.5rem;
   }
 
+  .order-banner-container-collapsed {
+    padding: 0.6rem 1.5rem;
+  }
+
   .order-banner-icon {
     font-size: 1.75rem;
     min-width: 44px;
     height: 44px;
+  }
+
+  .order-banner-icon-small {
+    font-size: 1.1rem;
+    min-width: 28px;
+    height: 28px;
   }
 
   .order-banner-title {
@@ -251,6 +336,23 @@
     gap: 1rem;
   }
 
+  .order-banner-container-collapsed {
+    padding: 0.65rem 1rem;
+  }
+
+  .order-banner.collapsed .order-banner-container-collapsed {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .order-banner-info-collapsed {
+    font-size: 0.85rem;
+  }
+
+  .order-id-collapsed {
+    font-size: 0.9rem;
+  }
+
   .order-banner-content {
     flex-direction: column;
     text-align: center;
@@ -273,10 +375,35 @@
     justify-content: center;
   }
 
-  .btn-banner-dismiss {
+  .btn-banner-collapse {
     position: absolute;
     top: 0.75rem;
     right: 0.75rem;
+  }
+
+  /* Keep dismiss button for guest prompts */
+  .btn-banner-dismiss {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .btn-banner-dismiss:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: rotate(90deg);
   }
 
   .guest-track-form {
@@ -318,8 +445,12 @@
 }
 
 /* Animation for active order banner */
-.active-order-banner {
+.active-order-banner.expanded {
   animation: slideDown 0.4s ease-out, greenGlow 3s ease-in-out infinite;
+}
+
+.active-order-banner.collapsed {
+  animation: greenGlowSubtle 3s ease-in-out infinite;
 }
 
 @keyframes greenGlow {
@@ -328,5 +459,14 @@
   }
   50% {
     box-shadow: 0 4px 12px rgba(6, 193, 103, 0.3);
+  }
+}
+
+@keyframes greenGlowSubtle {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+  50% {
+    box-shadow: 0 3px 10px rgba(6, 193, 103, 0.2);
   }
 }
