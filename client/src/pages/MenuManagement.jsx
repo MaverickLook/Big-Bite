@@ -184,7 +184,7 @@ const MenuManagement = () => {
   return (
     <div className="menu-management">
       <div className="menu-management-header">
-        <h1>🍽️ Menu Management</h1>
+        <h1>Menu Management</h1>
         <button 
           className="btn btn-primary"
           onClick={() => {

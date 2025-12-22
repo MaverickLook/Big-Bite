@@ -99,7 +99,7 @@ const AnalyticsDashboard = () => {
   return (
     <div className="analytics-dashboard">
       <div className="analytics-header">
-        <h1>📈 Analytics Dashboard</h1>
+        <h1>Analytics Dashboard</h1>
       </div>
 
       {/* Revenue Summary */}

@@ -108,7 +108,7 @@ const OrdersManagement = () => {
   return (
     <div className="orders-management">
       <div className="orders-header">
-        <h1>📦 Orders Management</h1>
+        <h1>Orders Management</h1>
       </div>
 
       {error && <div className="error-message">{error}</div>}
