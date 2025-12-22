@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import StatusToggle from '../components/StatusToggle';
@@ -13,13 +13,9 @@ const OrdersManagement = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showOrderDetails, setShowOrderDetails] = useState(false);
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async ({ silent = false } = {}) => {
     try {
-      setIsLoading(true);
+      if (!silent) setIsLoading(true);
       setError(null);
       const response = await api.get('/orders');
       setOrders(response.data || []);
@@ -39,9 +35,15 @@ const OrdersManagement = () => {
         }
       ]);
     } finally {
-      setIsLoading(false);
+      if (!silent) setIsLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchOrders();
+    const interval = setInterval(() => fetchOrders({ silent: true }), 10000); // poll every 10s
+    return () => clearInterval(interval);
+  }, [fetchOrders]);
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {

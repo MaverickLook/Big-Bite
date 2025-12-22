@@ -18,10 +18,11 @@
 /* Hero Section */
 .hero {
   width: 100%;
-  min-height: 80vh;
+  height: 100vh; /* Changed from min-height to height for full coverage */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed; /* Parallax effect - optional, remove if not desired */
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -80,7 +81,8 @@
 /* Responsive Design */
 @media (max-width: 1024px) {
   .hero {
-    min-height: 70vh;
+    height: 100vh; /* Keep full height on tablets */
+    background-attachment: scroll; /* Disable parallax on mobile for better performance */
   }
 
   .hero-content {
@@ -105,9 +107,10 @@
   }
 
   .hero {
-    min-height: 60vh;
+    height: 100vh; /* Full height on mobile */
     justify-content: center;
     background-position: center;
+    background-attachment: scroll; /* Disable parallax on mobile */
     margin-top: -2px;
   }
 
@@ -129,7 +132,8 @@
 
 @media (max-width: 480px) {
   .hero {
-    min-height: 50vh;
+    height: 100vh; /* Full height on small mobile */
+    background-attachment: scroll; /* Disable parallax */
   }
 
   .hero-content {
