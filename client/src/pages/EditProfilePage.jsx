@@ -123,7 +123,7 @@ const EditProfilePage = () => {
             className="btn btn-secondary"
             onClick={() => navigate('/account')}
             disabled={isLoading}
-            style={{ marginBottom: '0.75rem' }}
+            style={{ marginBottom: '0.25rem' }}
           >
             Back
           </button>
