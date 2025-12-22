@@ -1,10 +1,14 @@
 import React from 'react';
 import CurrentOrderStatus from '../components/CurrentOrderStatus';
+import OrderStatusBanner from '../components/OrderStatusBanner';
 import './HomePage.css';
 
 const HomePage = () => {
   return (
     <div className="home-page">
+      {/* Order Status Banner - Between Navbar and Hero */}
+      <OrderStatusBanner />
+
       {/* Hero Section */}
       <section 
         className="hero"

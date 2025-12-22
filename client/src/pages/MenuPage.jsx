@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import FoodCard from '../components/FoodCard';
 import api from '../services/api';
 import './MenuPage.css';
@@ -13,36 +13,50 @@ const MenuPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [cartCount, setCartCount] = useState(0);
 
-  // Fetch food data on component mount
-  useEffect(() => {
-    const fetchFoods = async () => {
-      try {
+  // Fetch food data with optional silent mode for polling
+  const fetchFoods = useCallback(async ({ silent = false } = {}) => {
+    try {
+      if (!silent) {
         setIsLoading(true);
         setError(null);
+      }
 
-        // Try to load from real backend first
-        const response = await api.get('/foods');
-        const apiFoods = response.data || [];
+      // Try to load from real backend first
+      const response = await api.get('/foods');
+      const apiFoods = response.data || [];
 
-        setFoods(apiFoods);
-        setFilteredFoods(apiFoods);
+      setFoods(apiFoods);
+      setFilteredFoods(apiFoods);
 
-        // Derive categories from API data
-        const uniqueCategories = [
-          'All',
-          ...Array.from(new Set(apiFoods.map((food) => food.category).filter(Boolean))),
-        ];
-        setCategories(uniqueCategories);
-      } catch (err) {
+      // Derive categories from API data
+      const uniqueCategories = [
+        'All',
+        ...Array.from(new Set(apiFoods.map((food) => food.category).filter(Boolean))),
+      ];
+      setCategories(uniqueCategories);
+    } catch (err) {
+      if (!silent) {
         setError('Failed to load menu. Please try again.');
         console.error('Error fetching foods:', err);
-      } finally {
+      }
+    } finally {
+      if (!silent) {
         setIsLoading(false);
       }
-    };
-
-    fetchFoods();
+    }
   }, []);
+
+  // Initial fetch and setup polling
+  useEffect(() => {
+    fetchFoods();
+
+    // Set up auto-refresh every 10 seconds
+    const interval = setInterval(() => {
+      fetchFoods({ silent: true });
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [fetchFoods]);
 
   // Filter foods by category and search term
   useEffect(() => {
