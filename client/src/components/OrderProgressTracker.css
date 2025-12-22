@@ -25,7 +25,7 @@
   font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
-  transition: all 0.3s;
+  transition: all 0.5s ease;
 }
 
 .progress-step.pending .step-marker {
@@ -39,12 +39,14 @@
   color: white;
   border: 2px solid #ff6b35;
   box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.2);
+  animation: pulse 2s infinite;
 }
 
 .progress-step.completed .step-marker {
   background: #2e7d32;
   color: white;
   border: 2px solid #2e7d32;
+  animation: checkmark 0.5s ease;
 }
 
 .progress-step.cancelled .step-marker {
@@ -75,11 +77,49 @@
   background: #e0e0e0;
   margin: 0 0.5rem;
   margin-bottom: 20px;
-  transition: all 0.3s;
+  transition: all 0.5s ease;
 }
 
 .progress-line.completed {
   background: #2e7d32;
+  animation: fillLine 0.8s ease;
+}
+
+/* Keyframe Animations */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 8px rgba(255, 107, 53, 0.4);
+  }
+}
+
+@keyframes fillLine {
+  from {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  to {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+@keyframes checkmark {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @media (max-width: 768px) {

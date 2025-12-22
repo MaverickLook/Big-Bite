@@ -2,10 +2,10 @@ import React from 'react';
 import './OrderProgressTracker.css';
 
 const ORDER_STEPS = [
-  { key: 'pending', label: 'Order Placed' },
-  { key: 'preparing', label: 'Preparing' },
-  { key: 'delivering', label: 'Delivering' },
-  { key: 'completed', label: 'Completed' }
+  { key: 'pending', label: 'Order Placed', icon: '📋' },
+  { key: 'preparing', label: 'Preparing', icon: '👨‍🍳' },
+  { key: 'delivering', label: 'Delivering', icon: '🚚' },
+  { key: 'completed', label: 'Completed', icon: '✓' }
 ];
 
 const STATUS_ORDER = ['pending', 'preparing', 'delivering', 'completed'];
@@ -20,6 +20,12 @@ const OrderProgressTracker = ({ status }) => {
     if (stepIndex < currentIndex) return 'completed';
     if (stepIndex === currentIndex) return 'current';
     return 'pending';
+  };
+
+  const getStepIcon = (step, stepStatus) => {
+    if (stepStatus === 'completed') return '✓';
+    if (stepStatus === 'current') return step.icon;
+    return step.icon;
   };
 
   if (status === 'cancelled') {
@@ -37,11 +43,12 @@ const OrderProgressTracker = ({ status }) => {
     <div className="order-progress">
       {ORDER_STEPS.map((step, index) => {
         const stepStatus = getStepStatus(step.key);
+        const icon = getStepIcon(step, stepStatus);
         return (
           <React.Fragment key={step.key}>
             <div className={`progress-step ${stepStatus}`}>
               <div className="step-marker">
-                {stepStatus === 'completed' ? '✓' : stepStatus === 'current' ? '●' : '○'}
+                {icon}
               </div>
               <div className="step-label">{step.label}</div>
             </div>
