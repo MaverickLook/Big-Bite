@@ -351,6 +351,7 @@
 .category-cell {
   width: 140px;
   min-width: 120px;
+  color: #000;
 }
 
 .price-cell {
