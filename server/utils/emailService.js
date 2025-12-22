@@ -32,6 +32,8 @@ if (EMAIL_USER && EMAIL_PASSWORD) {
         user: EMAIL_USER,
         pass: EMAIL_PASSWORD,
       },
+      connectionTimeout: 5000, // 5 seconds
+      socketTimeout: 5000, // 5 seconds
     });
     isEmailConfigured = true;
     console.log('✓ Email transporter created successfully');
@@ -141,6 +143,17 @@ export const sendPasswordResetEmail = async (email, resetToken, userName = 'User
       console.error('SMTP Response:', error.response);
     }
     console.error('=============================================\n');
+    
+    // Log helpful troubleshooting info for timeout errors
+    if (error.code === 'ETIMEDOUT') {
+      console.error('\n⚠️  TROUBLESHOOTING ETIMEDOUT:');
+      console.error('1. Verify Gmail credentials in .env file');
+      console.error('2. Generate a new app password: https://myaccount.google.com/apppasswords');
+      console.error('3. Make sure you have 2FA enabled on your Gmail account');
+      console.error('4. Check if Gmail is blocking this connection');
+      console.error('5. Try using your email password instead of app password\n');
+    }
+    
     throw new Error(`Failed to send email: ${error.message}`);
   }
 };
