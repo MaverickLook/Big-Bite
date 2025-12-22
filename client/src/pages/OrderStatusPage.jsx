@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
 import OrderStatusBadge from '../components/OrderStatusBadge';
@@ -12,16 +12,9 @@ const OrderStatusPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchOrder();
-    // Poll for status updates every 10 seconds
-    const interval = setInterval(fetchOrder, 10000);
-    return () => clearInterval(interval);
-  }, [orderId]);
-
-  const fetchOrder = async () => {
+  const fetchOrder = useCallback(async ({ silent = false } = {}) => {
     try {
-      setIsLoading(true);
+      if (!silent) setIsLoading(true);
       setError(null);
       
       // Try to fetch order by ID
@@ -48,9 +41,16 @@ const OrderStatusPage = () => {
         setError('Order not found');
       }
     } finally {
-      setIsLoading(false);
+      if (!silent) setIsLoading(false);
     }
-  };
+  }, [orderId]);
+
+  useEffect(() => {
+    fetchOrder();
+    // Poll for status updates every 10 seconds without flicker
+    const interval = setInterval(() => fetchOrder({ silent: true }), 10000);
+    return () => clearInterval(interval);
+  }, [fetchOrder]);
 
   const getEstimatedDeliveryTime = () => {
     if (!order) return '30-45 minutes';
