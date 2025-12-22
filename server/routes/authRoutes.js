@@ -236,7 +236,12 @@ router.post("/forgot-password", async (req, res) => {
           user.resetToken = hashedToken;
           user.resetTokenExpiry = resetTokenExpiry;
           await user.save();
+          
+          // Debug: Log expiry time
           console.log('✓ Reset token generated and saved (hashed)');
+          console.log('Current time:', new Date().toISOString());
+          console.log('Token expires at:', resetTokenExpiry.toISOString());
+          console.log('Time difference (minutes):', ((resetTokenExpiry - new Date()) / 1000 / 60).toFixed(2));
 
           // Send reset email with raw token (email contains raw token, DB stores hash)
           try {
@@ -310,7 +315,19 @@ router.post("/reset-password", async (req, res) => {
       resetTokenExpiry: { $gt: new Date() } // Token must not be expired
     });
 
+    // Debug: Log token validation
+    const currentTime = new Date();
+    console.log('Token lookup at:', currentTime.toISOString());
+    
     if (!user) {
+      // Log why token failed
+      const userWithToken = await User.findOne({ resetToken: hashedToken });
+      if (userWithToken) {
+        console.log('⚠️  Token found but expired');
+        console.log('Stored expiry:', userWithToken.resetTokenExpiry?.toISOString() || 'undefined');
+        console.log('Current time:', currentTime.toISOString());
+        console.log('Time difference (minutes):', userWithToken.resetTokenExpiry ? ((userWithToken.resetTokenExpiry - currentTime) / 1000 / 60).toFixed(2) : 'N/A');
+      }
       console.log('✗ Invalid or expired token');
       return res.status(400).json({ 
         message: "Invalid or expired reset token. Please request a new password reset link." 
