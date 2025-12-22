@@ -56,10 +56,7 @@ const EditProfilePage = () => {
   return (
     <div className="page-container edit-profile-page">
       <div className="edit-profile-header">
-        <h1>✏️ Edit Profile</h1>
-        <button className="btn btn-secondary" onClick={() => navigate('/account')}>
-          Back
-        </button>
+        <h1 style={{ textAlign: 'center', width: '100%' }}>✏️ Edit Profile</h1>
       </div>
 
       <div className="edit-profile-card">
@@ -120,6 +117,16 @@ const EditProfilePage = () => {
               placeholder="Street, city, postal code (optional)"
             />
           </div>
+
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => navigate('/account')}
+            disabled={isLoading}
+            style={{ marginBottom: '0.75rem' }}
+          >
+            Back
+          </button>
 
           <button type="submit" className="btn btn-primary" disabled={isLoading}>
             {isLoading ? 'Saving…' : 'Save Changes'}
