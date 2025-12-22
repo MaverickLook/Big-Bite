@@ -1,0 +1,108 @@
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+  background: #0f1316;
+  color: #e9eef3;
+}
+
+.admin-sidebar {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  height: 100vh;
+  background: #11181f;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  width: 72px; /* collapsed width */
+  transition: width 0.28s ease, box-shadow 0.28s ease, background 0.28s ease;
+  overflow: hidden;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  z-index: 10;
+}
+
+.admin-sidebar:hover {
+  width: 260px; /* expanded width */
+  box-shadow: 8px 0 20px rgba(0, 0, 0, 0.22);
+  background: #0f1a22;
+}
+
+.admin-sidebar h2 {
+  margin: 16px 16px 8px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #e9eef3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 8px 16px;
+}
+
+.admin-nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  color: #c8d5e4;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  white-space: nowrap; /* keep on one line */
+  overflow: hidden; /* clip when collapsed */
+  text-overflow: ellipsis;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.admin-nav a .nav-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e9eef3;
+  flex: 0 0 28px;
+}
+
+.admin-nav a:hover .nav-icon,
+.admin-nav a.active .nav-icon {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.admin-nav a .nav-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-nav a:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+.admin-nav a.active {
+  background: rgba(6, 193, 103, 0.18);
+  color: #ffffff;
+}
+
+.admin-content {
+  flex: 1;
+  min-width: 0; /* prevent overflow */
+  padding: 24px;
+}
+
+/* Responsive: keep expanded on touch devices for usability */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    width: 220px;
+  }
+  .admin-sidebar:hover {
+    width: 220px;
+  }
+}
