@@ -191,11 +191,6 @@ router.put("/profile", authMiddleware, async (req, res) => {
   }
 });
 
-// Simple rate limiting map (in production, use Redis or similar)
-const forgotPasswordAttempts = new Map();
-const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
-const MAX_ATTEMPTS = 3;
-
 // FORGOT PASSWORD
 router.post("/forgot-password", async (req, res) => {
   try {
@@ -218,27 +213,6 @@ router.post("/forgot-password", async (req, res) => {
       console.log('✗ Validation failed: Invalid email format');
       return res.status(400).json({ message: "Invalid email format" });
     }
-
-    // Rate limiting check
-    const now = Date.now();
-    const attempts = forgotPasswordAttempts.get(email) || { count: 0, resetTime: now + RATE_LIMIT_WINDOW };
-    
-    if (now > attempts.resetTime) {
-      // Reset window expired
-      attempts.count = 0;
-      attempts.resetTime = now + RATE_LIMIT_WINDOW;
-    }
-
-    if (attempts.count >= MAX_ATTEMPTS) {
-      console.log(`⚠️  Rate limit exceeded for ${email}`);
-      // Still return success to prevent information leakage
-      return res.json({
-        message: "If an account with that email exists, we've sent a reset link."
-      });
-    }
-
-    attempts.count += 1;
-    forgotPasswordAttempts.set(email, attempts);
 
     try {
       const user = await User.findOne({ email });
