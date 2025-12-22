@@ -45,6 +45,18 @@
   position: relative;
 }
 
+/* Expanded layout: stack header and list vertically */
+.active-order-banner.expanded .order-banner-container {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+  padding-bottom: 2.25rem; /* room for bottom-center button */
+}
+
+.active-order-banner.expanded .order-banner-content {
+  margin-bottom: 0.25rem;
+}
+
 /* Collapsed State Styles */
 .order-banner-container-collapsed {
   max-width: 1400px;
