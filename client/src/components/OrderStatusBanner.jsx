@@ -294,7 +294,7 @@ const OrderStatusBanner = () => {
           aria-label="Collapse"
           title="Minimize banner"
         >
-          Minimize
+          ▼
         </button>
       </div>
     </div>

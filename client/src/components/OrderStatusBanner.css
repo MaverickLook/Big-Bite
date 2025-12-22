@@ -75,7 +75,7 @@
   justify-content: center;
   min-width: 32px;
   height: 32px;
-  background: rgba(255, 255, 255, 0.2);
+  background: #ffffff;
   border-radius: 50%;
   transition: all 0.3s ease;
 }
@@ -133,7 +133,7 @@
   justify-content: center;
   min-width: 48px;
   height: 48px;
-  background: rgba(255, 255, 255, 0.2);
+  background: #ffffff;
   border-radius: 50%;
 }
 
@@ -272,11 +272,18 @@
   bottom: 8px;
   left: 50%;
   transform: translateX(-50%);
-  width: auto;
-  height: auto;
-  padding: 0.4rem 0.75rem;
-  border-radius: 16px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
   font-weight: 600;
+  font-size: 1rem;
+  color: #06c167;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 /* Guest Banner Variant */
@@ -522,7 +529,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.2);
+  background: #ffffff;
   border-radius: 50%;
 }
 
