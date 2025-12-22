@@ -127,7 +127,7 @@ const CheckoutPage = () => {
   };
 
   const subtotal = calculateTotal();
-  const deliveryFee = 2.99;
+  const deliveryFee = 40;
   const total = subtotal + deliveryFee;
 
   return (
