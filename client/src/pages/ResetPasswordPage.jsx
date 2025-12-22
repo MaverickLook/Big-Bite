@@ -83,7 +83,7 @@ const ResetPasswordPage = () => {
           </div>
 
           <div className="auth-footer" style={{ marginTop: '1.5rem' }}>
-            <Link to="/login" className="btn btn-primary auth-btn" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
+            <Link to="/login" className="btn btn-primary auth-btn" style={{ display: 'block', textAlign: 'center', textDecoration: 'none', width: '100%' }}>
               Back to Login
             </Link>
           </div>
