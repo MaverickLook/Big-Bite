@@ -150,7 +150,7 @@ const CartPage = () => {
 
           <div className="summary-row total">
             <span>Total:</span>
-            <span>NT$ {(calculateTotal() + 40.0 + calculateTotal() * 0.08).toFixed(2)}</span>
+            <span>NT$ {(calculateTotal() + 40.0).toFixed(2)}</span>
           </div>
 
           <button 

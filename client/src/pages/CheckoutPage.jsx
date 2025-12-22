@@ -128,8 +128,7 @@ const CheckoutPage = () => {
 
   const subtotal = calculateTotal();
   const deliveryFee = 2.99;
-  const tax = subtotal * 0.08;
-  const total = subtotal + deliveryFee + tax;
+  const total = subtotal + deliveryFee;
 
   return (
     <div className="page-container checkout-page">
@@ -169,10 +168,7 @@ const CheckoutPage = () => {
               <span>Delivery Fee:</span>
               <span>NT$ {deliveryFee.toFixed(2)}</span>
             </div>
-            <div className="total-row">
-              <span>Tax:</span>
-              <span>NT$ {tax.toFixed(2)}</span>
-            </div>
+
             <div className="total-row total-final">
               <span>Total:</span>
               <span>NT$ {total.toFixed(2)}</span>
