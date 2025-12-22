@@ -134,6 +134,10 @@ const OrdersManagement = () => {
                   <span className="detail-value">{selectedOrder.user?.email || 'N/A'}</span>
                 </div>
                 <div className="detail-row">
+                  <span className="detail-label">Phone:</span>
+                  <span className="detail-value">{selectedOrder.phoneNumber || selectedOrder.phone || 'N/A'}</span>
+                </div>
+                <div className="detail-row">
                   <span className="detail-label">Status:</span>
                   <OrderStatusBadge status={selectedOrder.status} />
                 </div>
