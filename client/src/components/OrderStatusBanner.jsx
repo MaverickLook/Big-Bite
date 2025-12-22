@@ -73,8 +73,9 @@ const OrderStatusBanner = () => {
   };
 
   const handleTrackOrder = () => {
-    if (currentOrder) {
-      navigate(`/order/${currentOrder._id}`);
+    const top = activeOrders[0];
+    if (top) {
+      navigate(`/order/${top._id}`);
     }
   };
 
