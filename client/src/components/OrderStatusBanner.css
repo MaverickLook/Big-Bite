@@ -3,8 +3,8 @@
   position: sticky;
   top: 70px; /* Below the navbar */
   z-index: 100; /* Below navbar (120) but above content */
-  background: linear-gradient(135deg, #06c167 0%, #05a556 100%);
-  color: white;
+  background: #ffffff;
+  color: #333;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
 }
