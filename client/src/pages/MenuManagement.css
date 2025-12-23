@@ -387,7 +387,7 @@
 .actions-cell {
   width: 200px;
   min-width: 180px;
-  text-align: center;
+  text-align: bottom;
   vertical-align: middle;
   padding: 0.75rem;
 }
