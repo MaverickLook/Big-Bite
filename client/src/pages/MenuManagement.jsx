@@ -192,7 +192,7 @@ const MenuManagement = () => {
             setShowForm(true);
           }}
         >
-          ➕ Add New Item
+          + Add New Item
         </button>
       </div>
 

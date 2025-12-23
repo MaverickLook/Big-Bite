@@ -387,12 +387,14 @@
 .actions-cell {
   width: 200px;
   min-width: 180px;
+  text-align: center;
 }
 
 .action-buttons {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .action-buttons button {
