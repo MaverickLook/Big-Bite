@@ -4,32 +4,28 @@ import { CLIENT_URL } from "../config/env.js";
 
 const router = express.Router();
 
-// Login with Google
 router.get(
   "/google",
   passport.authenticate("google", {
     scope: ["profile", "email"],
-    session: false // Disable session since we're using JWT
+    session: false
   })
 );
 
-// Google redirect callback
 router.get(
   "/google/callback",
   passport.authenticate("google", {
     session: false,
-    failureRedirect: CLIENT_URL || "/" // Redirect to frontend on failure
+    failureRedirect: CLIENT_URL || "/"
   }),
   (req, res) => {
     try {
-      // Check if user data exists
       if (!req.user || !req.user.token) {
         return res.redirect((CLIENT_URL || "/") + "/login?error=google_auth_failed");
       }
 
       const { token, user } = req.user;
 
-      // Redirect back to frontend with token and basic user info in query
       const redirectUrl = new URL((CLIENT_URL || "http://localhost:3000") + "/google-success");
       redirectUrl.searchParams.set("token", token);
       redirectUrl.searchParams.set("name", user.name);

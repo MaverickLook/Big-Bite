@@ -22,7 +22,6 @@ const EditProfilePage = () => {
   }, [refreshProfile]);
 
   useEffect(() => {
-    // Only prefill when user changes (not on every keystroke)
     setFormData({
       name: user?.name || '',
       email: user?.email || '',

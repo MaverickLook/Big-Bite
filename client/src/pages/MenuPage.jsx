@@ -13,7 +13,6 @@ const MenuPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [cartCount, setCartCount] = useState(0);
 
-  // Fetch food data with optional silent mode for polling
   const fetchFoods = useCallback(async ({ silent = false } = {}) => {
     try {
       if (!silent) {
@@ -21,14 +20,14 @@ const MenuPage = () => {
         setError(null);
       }
 
-      // Try to load from real backend first
+      // load from backend
       const response = await api.get('/foods');
       const apiFoods = response.data || [];
 
       setFoods(apiFoods);
       setFilteredFoods(apiFoods);
 
-      // Derive categories from API data
+      //categories from API data
       const uniqueCategories = [
         'All',
         ...Array.from(new Set(apiFoods.map((food) => food.category).filter(Boolean))),
@@ -46,11 +45,11 @@ const MenuPage = () => {
     }
   }, []);
 
-  // Initial fetch and setup polling
+  // fetch and setup polling
   useEffect(() => {
     fetchFoods();
 
-    // Set up auto-refresh every 10 seconds
+    //auto-refresh every 10 seconds
     const interval = setInterval(() => {
       fetchFoods({ silent: true });
     }, 10000);
@@ -74,9 +73,6 @@ const MenuPage = () => {
         (food.description && food.description.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
-
-    // Only show available foods (optional - you can remove this if you want to show all)
-    // filtered = filtered.filter(food => food.available !== false);
 
     setFilteredFoods(filtered);
   }, [selectedCategory, searchTerm, foods]);

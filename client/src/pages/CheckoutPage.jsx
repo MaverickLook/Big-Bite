@@ -12,22 +12,20 @@ const CheckoutPage = () => {
 
   const { cartItems, calculateTotal, clearCart } = useCart();
 
-  // Redirect guests to login page (with return path)
+  // guests go to login page
   useEffect(() => {
     if (!isAuthenticated) {
-      // Store the intended checkout destination
       localStorage.setItem('redirectAfterLogin', '/checkout');
       navigate('/login', { replace: true });
       return;
     }
     
-    // Redirect admins away from checkout page
+    // admins cannot use checkout page
     if (user?.role === 'admin') {
       navigate('/admin-dashboard', { replace: true });
     }
   }, [user, isAuthenticated, navigate]);
 
-  // Ensure we have the latest profile before prefilling checkout fields
   useEffect(() => {
     refreshProfile?.();
   }, [refreshProfile]);
@@ -40,7 +38,6 @@ const CheckoutPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
-  // Prefill from user profile (single source of truth) - only once, and only if inputs are empty
   useEffect(() => {
     if (hasPrefilledRef.current) return;
     if (!user) return;
@@ -48,7 +45,6 @@ const CheckoutPage = () => {
     const nextAddress = (user.deliveryAddress || '').trim();
     const nextPhone = (user.phoneNumber || '').trim();
 
-    // Only prefill if we actually have values and the user hasn't typed anything yet
     if (!nextAddress && !nextPhone) return;
 
     setFormData((prev) => ({
@@ -81,7 +77,6 @@ const CheckoutPage = () => {
       return;
     }
 
-    // Filter out unavailable items from cart
     const availableItems = cartItems.filter(item => item.available !== false);
     
     if (availableItems.length === 0) {
@@ -91,20 +86,18 @@ const CheckoutPage = () => {
 
     if (availableItems.length < cartItems.length) {
       setError('Some items in your cart are currently unavailable and have been removed. Please review your order.');
-      // You could optionally update the cart here to remove unavailable items
     }
 
     setIsSubmitting(true);
     setError(null);
 
     try {
-      // Convert cart items to order format (only available items)
+      // Convert cart items to order format
       const orderItems = availableItems.map(item => ({
         foodId: item.id,
         quantity: item.quantity
       }));
 
-      // Create order with delivery information
       const response = await api.post('/orders', {
         items: orderItems,
         deliveryAddress: formData.address.trim(),
@@ -114,10 +107,8 @@ const CheckoutPage = () => {
 
       const order = response.data;
       
-      // Clear cart
       clearCart();
       
-      // Redirect to order status page
       navigate(`/order/${order._id}`);
     } catch (err) {
       console.error('Error creating order:', err);

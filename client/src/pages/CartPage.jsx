@@ -8,7 +8,6 @@ const CartPage = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
 
-  // Redirect admins away from cart page (but allow guests)
   useEffect(() => {
     if (isAuthenticated && user?.role === 'admin') {
       navigate('/admin-dashboard', { replace: true });
@@ -25,8 +24,12 @@ const CartPage = () => {
 
   const handleCheckout = () => {
     if (cartItems.length > 0) {
-      // Checkout page will handle redirect to login if user is not authenticated
-      navigate('/checkout');
+      // handle redirect to login if user is not authenticated
+      if (!isAuthenticated) {
+        navigate('/login');
+      } else {
+        navigate('/checkout');
+      }
     }
   };
 
@@ -68,7 +71,6 @@ const CartPage = () => {
 
           <div className="cart-items">
             {cartItems.map((item) => {
-              // Check if image is a URL (starts with http or data:) or an emoji
               const isImageUrl = item.image && (item.image.startsWith('http') || item.image.startsWith('data:image'));
               
               return (

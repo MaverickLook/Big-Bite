@@ -10,7 +10,7 @@ const FoodCard = ({ id, name, price, description, image, category, rating, revie
   const isAdmin = user?.role === 'admin';
 
   const handleAddToCart = () => {
-    if (isAdmin) return; // Prevent admins from adding to cart
+    if (isAdmin) return;
     if (available === false) {
       // Prevent adding unavailable items
       return;
@@ -18,18 +18,15 @@ const FoodCard = ({ id, name, price, description, image, category, rating, revie
     addToCart({ id, name, price, image, category, available });
     setIsAdded(true);
     
-    // Reset button after 1 second
     setTimeout(() => setIsAdded(false), 1000);
   };
 
-  // Check if image is a URL/base64 or emoji
   const isImageUrl = image && (image.startsWith('http') || image.startsWith('data:image'));
   
   const isUnavailable = available === false;
   
   return (
     <div className={`food-card ${isUnavailable ? 'unavailable' : ''}`}>
-      {/* Card Header with Image and Category */}
       <div className="food-card-header">
         <div className="menu-image-wrapper">
           {isImageUrl ? (
@@ -42,12 +39,10 @@ const FoodCard = ({ id, name, price, description, image, category, rating, revie
         {vegetarian && <span className="vegetarian-badge">🌱 Vegetarian</span>}
       </div>
 
-      {/* Card Body */}
       <div className="food-card-body">
         <h3 className="food-name">{name}</h3>
         <p className="food-description">{description}</p>
 
-        {/* Rating - Only show if rating exists */}
         {(rating || reviews) && (
           <div className="food-rating">
             {rating && <span className="stars">⭐ {rating}</span>}
@@ -55,17 +50,14 @@ const FoodCard = ({ id, name, price, description, image, category, rating, revie
           </div>
         )}
 
-        {/* Unavailable Message */}
         {isUnavailable && !isAdmin && (
           <div className="unavailable-message">
             ⚠️ This menu item is currently unavailable
           </div>
         )}
 
-        {/* Footer with Price and Button */}
         <div className="food-card-footer">
           <span className="food-price">NT$ {price.toFixed(2)}</span>
-          {/* Hide add to cart button for admin users */}
           {!isAdmin && (
             <button 
               className={`add-to-cart-btn ${isAdded ? 'added' : ''} ${isUnavailable ? 'disabled' : ''}`}

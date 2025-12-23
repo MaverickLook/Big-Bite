@@ -42,19 +42,16 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-content">
-        {/* Left Column - Logo */}
         <div className="footer-logo">
           <img src="/big-bite-logo.png" alt="Big-Bite" className="footer-logo-img" />
         </div>
 
-        {/* Center Column - Navigation */}
         <div className="footer-nav">
           <button onClick={handleHomeClick} className="footer-link">Home</button>
           <Link to="/menu" className="footer-link">Menu</Link>
           <button onClick={handleContactClick} className="footer-link">Contact</button>
         </div>
 
-        {/* Right Column - Contact Info */}
         <div className="footer-contact">
           <div className="footer-contact-item">
             <span className="footer-contact-label">ADDRESS</span>

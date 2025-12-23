@@ -61,13 +61,12 @@ const Navbar = () => {
                 e.preventDefault();
                 const contactSection = document.getElementById('contact');
                 if (contactSection) {
-                  const offsetTop = contactSection.offsetTop - 90; // Account for fixed navbar
+                  const offsetTop = contactSection.offsetTop - 90;
                   window.scrollTo({
                     top: offsetTop,
                     behavior: 'smooth'
                   });
                 } else {
-                  // If not on home page, navigate to home and then scroll
                   navigate('/');
                   setTimeout(() => {
                     const contactSection = document.getElementById('contact');
@@ -89,7 +88,6 @@ const Navbar = () => {
       </div>
 
       <div className="navbar-right">
-        {/* Show cart icon for all users (except admins when logged in) */}
         {(!isAuthenticated || user?.role !== 'admin') && (
           <Link to="/cart" className="cart-icon">
             🛒 Cart <span className="cart-count">{getItemCount()}</span>
@@ -98,7 +96,6 @@ const Navbar = () => {
         
         {isAuthenticated ? (
           <>
-            {/* Show admin dashboard link for admins */}
             {user?.role === 'admin' && (
               <Link to="/admin-dashboard" className="admin-link">
                 Admin Panel
@@ -120,7 +117,6 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* Mobile menu toggle */}
       <button 
         className="menu-toggle" 
         onClick={() => setIsMenuOpen(!isMenuOpen)}

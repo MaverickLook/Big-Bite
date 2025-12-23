@@ -18,7 +18,6 @@ const AccountPage = () => {
   }, [user]);
 
   useEffect(() => {
-    // Ensure profile is real and up-to-date
     refreshProfile?.();
   }, [refreshProfile]);
 

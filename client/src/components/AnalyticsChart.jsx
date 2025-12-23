@@ -16,7 +16,8 @@ const AnalyticsChart = ({ data, type = 'bar' }) => {
     );
   }
 
-  // data is an array of { date: string, value: number }
+
+//array
   const maxValue = Math.max(...safeData.map(d => Number(d.value) || 0), 1);
   const chartHeight = 200;
 

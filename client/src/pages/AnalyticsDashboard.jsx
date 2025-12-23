@@ -30,7 +30,6 @@ const AnalyticsDashboard = () => {
     try {
       setIsLoading(true);
 
-      // Single source of truth: backend aggregation
       const overviewResp = await api.get('/orders/analytics/overview?days=7');
       const overview = overviewResp.data;
 
@@ -75,7 +74,6 @@ const AnalyticsDashboard = () => {
 
     } catch (error) {
       console.error('Error fetching analytics:', error);
-      // No fake numbers: show empty states instead
       setRevenueData({ totalRevenue: 0, revenueToday: 0, totalOrders: 0, completedOrders: 0 });
       setOrderStats({ pending: 0, preparing: 0, delivering: 0, completed: 0 });
       setChartData([]);

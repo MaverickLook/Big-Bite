@@ -18,12 +18,10 @@ const AdminProtectedRoute = ({ children }) => {
     );
   }
 
-  // If not authenticated, redirect to login
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  // If user is not an admin, redirect to home/menu with access denied message
   if (user?.role !== 'admin') {
     return (
       <div style={{ 

@@ -3,7 +3,6 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import User from "../models/user.js";
 import jwt from "jsonwebtoken";
 
-// Import from config
 import {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
@@ -17,7 +16,6 @@ console.log("Passport - Checking environment variables:");
 console.log("GOOGLE_CLIENT_ID:", GOOGLE_CLIENT_ID ? "Present" : "Missing");
 console.log("GOOGLE_CLIENT_SECRET:", GOOGLE_CLIENT_SECRET ? "Present" : "Missing");
 
-// Compute callback URL with fallback to localhost:PORT if not provided
 const derivedCallbackUrl = GOOGLE_CALLBACK_URL;
 
 if (!GOOGLE_CALLBACK_URL) {
@@ -27,7 +25,6 @@ if (!GOOGLE_CALLBACK_URL) {
   );
 }
 
-// Only enable Google strategy when all required env vars are present
 if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && JWT_SECRET && derivedCallbackUrl) {
   console.log("Passport - Initializing Google Strategy...");
 
@@ -72,7 +69,6 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && JWT_SECRET && derivedCallbackUrl
             });
             console.log("New user created with Google OAuth:", email);
           } else {
-            // Update googleId if user exists but doesn't have it
             if (!foundUser.googleId) {
               foundUser.googleId = profile.id;
               await foundUser.save();
@@ -80,7 +76,6 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && JWT_SECRET && derivedCallbackUrl
             console.log("Existing user logged in with Google:", email);
           }
 
-          // Backfill authProvider for existing users
           if (!foundUser.authProvider) {
             foundUser.authProvider = "google";
             await foundUser.save();
@@ -118,12 +113,10 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && JWT_SECRET && derivedCallbackUrl
   );
 }
 
-// Serialize user for the session
 passport.serializeUser((user, done) => {
   done(null, user);
 });
 
-// Deserialize user from the session
 passport.deserializeUser((user, done) => {
   done(null, user);
 });

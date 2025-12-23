@@ -29,7 +29,7 @@ const LoginPage = () => {
         return;
       }
       
-      // Redirect admins to admin dashboard, regular users to menu
+      // admins to dashboard, users to menu
       if (result.user?.role === 'admin') {
         navigate('/admin-dashboard');
       } else {

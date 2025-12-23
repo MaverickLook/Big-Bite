@@ -17,7 +17,7 @@ const OrderStatusPage = () => {
       if (!silent) setIsLoading(true);
       setError(null);
       
-      // Try to fetch order by ID
+      //fetch order by ID
       const response = await api.get(`/orders/${orderId}`);
       setOrder(response.data);
     } catch (err) {
@@ -47,7 +47,6 @@ const OrderStatusPage = () => {
 
   useEffect(() => {
     fetchOrder();
-    // Poll for status updates every 10 seconds without flicker
     const interval = setInterval(() => fetchOrder({ silent: true }), 10000);
     return () => clearInterval(interval);
   }, [fetchOrder]);

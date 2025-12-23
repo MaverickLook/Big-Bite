@@ -2,8 +2,6 @@ import React from 'react';
 import './CategoryBadge.css';
 
 const CategoryBadge = ({ category }) => {
-  // Handle empty, null, undefined, or whitespace-only categories
-  // Also handle non-string types (convert to string first)
   const categoryStr = category ? String(category).trim() : '';
   
   if (!categoryStr) {
@@ -12,10 +10,8 @@ const CategoryBadge = ({ category }) => {
     );
   }
 
-  // Capitalize first letter and handle the rest
   const displayCategory = categoryStr.charAt(0).toUpperCase() + categoryStr.slice(1).toLowerCase();
   
-  // Map categories to colors
   const getCategoryClass = (cat) => {
     const lowerCat = cat.toLowerCase();
     if (lowerCat === 'pizza') return 'category-pizza';

@@ -7,11 +7,11 @@ const orderItemSchema = new mongoose.Schema(
       ref: "Food",
       required: true,
     },
-    name: { type: String, required: true },   // snapshot of food name
-    price: { type: Number, required: true },  // snapshot of price at order time
+    name: { type: String, required: true },
+    price: { type: Number, required: true },
     quantity: { type: Number, required: true, min: 1 },
   },
-  { _id: false } // we don't need separate _id for each item
+  { _id: false }
 );
 
 const orderSchema = new mongoose.Schema(
@@ -31,7 +31,6 @@ const orderSchema = new mongoose.Schema(
       enum: ["pending", "preparing", "delivering", "completed", "cancelled"],
       default: "pending",
     },
-    // Delivery info (persisted from checkout)
     deliveryAddress: { type: String, required: true, trim: true },
     phoneNumber: { type: String, required: true, trim: true },
     recipientName: { type: String, trim: true },

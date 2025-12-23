@@ -5,11 +5,9 @@ const userSchema = new mongoose.Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String },
-    // Legacy fields (kept for backward compatibility)
     phone: { type: String },
     address: { type: String },
 
-    // New profile fields
     authProvider: {
       type: String,
       enum: ["local", "google"],

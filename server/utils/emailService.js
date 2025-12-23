@@ -1,11 +1,9 @@
 import sgMail from "@sendgrid/mail";
 import nodemailer from "nodemailer";
 
-// Common config
 const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
 const EMAIL_FROM = process.env.EMAIL_FROM;
 
-// SendGrid (for Render / production)
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 const useSendgrid = process.env.NODE_ENV === "production" && !!SENDGRID_API_KEY;
 
@@ -14,7 +12,6 @@ if (useSendgrid) {
   console.log("Email: using SendGrid in production");
 }
 
-// SMTP (for local development only)
 const EMAIL_HOST = process.env.EMAIL_HOST || "smtp.gmail.com";
 const EMAIL_PORT = parseInt(process.env.EMAIL_PORT || "587", 10);
 const EMAIL_USER = process.env.EMAIL_USER;
@@ -46,9 +43,7 @@ console.log("EMAIL_FROM:", EMAIL_FROM || EMAIL_USER || "Not set");
 console.log("CLIENT_URL:", CLIENT_URL);
 console.log("===================================\n");
 
-/**
- * Send password reset email
- */
+
 export const sendPasswordResetEmail = async (
   email,
   resetToken,
@@ -120,12 +115,11 @@ If you didn't request this password reset, please ignore this email.
 
   const FROM_ADDRESS = EMAIL_FROM || EMAIL_USER;
 
-  // 1) Production on Render → use SendGrid HTTP API
   if (useSendgrid) {
     try {
       await sgMail.send({
         to: email,
-        from: FROM_ADDRESS, // must be a verified Single Sender or domain
+        from: FROM_ADDRESS,
         subject,
         html,
         text,
@@ -141,7 +135,6 @@ If you didn't request this password reset, please ignore this email.
     }
   }
 
-  // 2) Local development → use Nodemailer + Gmail SMTP
   if (!transporter || !isEmailConfigured) {
     console.log("\n⚠️ EMAIL NOT CONFIGURED LOCALLY - RESET LINK (for testing):");
     console.log("Reset Link:", resetUrl);
@@ -166,10 +159,8 @@ If you didn't request this password reset, please ignore this email.
   }
 };
 
-// Optional helpers (still valid)
 export const verifyEmailConfig = async () => {
   if (useSendgrid) {
-    // SendGrid doesn't need a verify step the same way SMTP does
     return true;
   }
   if (!EMAIL_USER || !EMAIL_PASSWORD || !transporter) {

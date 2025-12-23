@@ -32,21 +32,16 @@ const ForgotPasswordPage = () => {
 
     try {
       const response = await authAPI.forgotPassword(email);
-      // If we get a response (success or not), show success message
       setIsSuccess(true);
       setEmail('');
       setError('');
     } catch (err) {
       console.error('Forgot password error:', err);
-      // Better error handling
       if (err.response && err.response.status >= 400 && err.response.status < 500) {
-        // Client error (4xx) - show the error message
         setError(err.response.data?.message || 'Please check your email address.');
       } else if (err.request) {
-        // Request made but no response received
         setError('Unable to connect to server. Please check your connection and try again.');
       } else {
-        // Network error or other issue - still show success to match backend behavior
         setIsSuccess(true);
         setEmail('');
       }

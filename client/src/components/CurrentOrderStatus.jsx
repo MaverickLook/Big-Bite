@@ -13,8 +13,7 @@ const CurrentOrderStatus = () => {
   useEffect(() => {
     if (isAuthenticated && user?.id) {
       fetchCurrentOrder();
-      // Poll for updates every 15 seconds
-      const interval = setInterval(fetchCurrentOrder, 15000);
+      const interval = setInterval(fetchCurrentOrder, 15000);//update every 15sec
       return () => clearInterval(interval);
     } else {
       setIsLoading(false);
@@ -35,7 +34,6 @@ const CurrentOrderStatus = () => {
       const response = await api.get(`/orders/user/${userId}`);
       const orders = response.data || [];
       
-      // Find the most recent non-completed, non-cancelled order
       const activeOrder = orders
         .filter(o => o.status !== 'completed' && o.status !== 'cancelled')
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];

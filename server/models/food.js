@@ -5,7 +5,7 @@ const foodSchema = new mongoose.Schema(
     description: { type: String },
     price: { type: Number, required: true },
     category: { type: String },
-    image: { type: String }, // image URL
+    image: { type: String },
     available: { type: Boolean, default: true },
   },
   { timestamps: true }

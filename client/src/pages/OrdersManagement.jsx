@@ -22,7 +22,6 @@ const OrdersManagement = () => {
     } catch (err) {
       console.error('Error fetching orders:', err);
       setError('Failed to load orders. Please try again.');
-      // Use mock data if API fails
       setOrders([
         {
           _id: '1',
@@ -41,7 +40,7 @@ const OrdersManagement = () => {
 
   useEffect(() => {
     fetchOrders();
-    const interval = setInterval(() => fetchOrders({ silent: true }), 10000); // poll every 10s
+    const interval = setInterval(() => fetchOrders({ silent: true }), 10000);
     return () => clearInterval(interval);
   }, [fetchOrders]);
 
@@ -50,12 +49,10 @@ const OrdersManagement = () => {
       const response = await api.put(`/orders/${orderId}/status`, { status: newStatus });
       const updated = response.data;
       
-      // Update local state
       setOrders(prev => prev.map(order => 
         order._id === orderId ? { ...order, ...updated } : order
       ));
 
-      // If viewing details, update that too
       if (selectedOrder && selectedOrder._id === orderId) {
         setSelectedOrder(prev => ({ ...prev, ...updated }));
       }

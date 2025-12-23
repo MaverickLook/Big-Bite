@@ -1,4 +1,3 @@
-// Import config FIRST to load environment variables
 import "./config/env.js";
 
 import express from "express";
@@ -6,21 +5,18 @@ import mongoose from "mongoose";
 import cors from "cors";
 import passport from "./utils/passport.js";
 
-// Import config variables
 import { PORT, MONGO_URI } from "./config/env.js";
 import { verifyEmailConfig } from "./utils/emailService.js";
 
-//import foodRoutes
 import foodRoutes from "./routes/foodRoutes.js"
 const app = express();
 
 app.use(cors());
-// Increase payload limit because images are stored as base64 strings
+// Larger limit image uploads
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(passport.initialize());
 
-// Import routes
 import authRoutes from "./routes/authRoutes.js";
 import googleAuth from "./routes/googleAuth.js";
 
@@ -35,7 +31,6 @@ app.get("/", (req, res) => {
   res.send("Backend is working!");
 });
 
-// Health check endpoint
 app.get("/health", (req, res) => {
   res.json({
     status: "OK",
@@ -43,13 +38,12 @@ app.get("/health", (req, res) => {
   });
 });
 
-// Connect to MongoDB
+//connect to database
 mongoose
   .connect(MONGO_URI)
   .then(() => {
     console.log("Connected to MongoDB");
     
-    // Verify email configuration on startup
     verifyEmailConfig().then((isConfigured) => {
       if (!isConfigured) {
         console.log('\n⚠️  Email service is not configured.');

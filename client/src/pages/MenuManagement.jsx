@@ -18,13 +18,11 @@ const MenuManagement = () => {
   });
   const [imagePreview, setImagePreview] = useState(null);
 
-  // Fetch all foods
   const fetchFoods = async () => {
     try {
       setIsLoading(true);
       setError(null);
       const response = await api.get('/foods');
-      // Debug: Log sample item to verify category field exists
       if (response.data && response.data.length > 0) {
         const sample = response.data[0];
         console.log('[MenuManagement] Foods fetched. Sample item:', {
@@ -34,7 +32,6 @@ const MenuManagement = () => {
           categoryType: typeof sample.category,
           allFields: Object.keys(sample)
         });
-        // Log all items' categories
         response.data.forEach((food, idx) => {
           console.log(`[MenuManagement] Food[${idx}] "${food.name}": category =`, food.category);
         });
@@ -52,7 +49,6 @@ const MenuManagement = () => {
     fetchFoods();
   }, []);
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -61,17 +57,14 @@ const MenuManagement = () => {
     }));
   };
 
-  // Handle image file selection
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Validate file type
       if (!file.type.startsWith('image/')) {
         setError('Please select a valid image file');
         return;
       }
       
-      // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         setError('Image size must be less than 5MB');
         return;
@@ -87,11 +80,9 @@ const MenuManagement = () => {
     }
   };
 
-  // Handle form submission (create or update)
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validate category is selected
     if (!formData.category || formData.category.trim() === '') {
       setError('Please select a category for this item');
       return;
@@ -101,7 +92,7 @@ const MenuManagement = () => {
       const foodData = {
         ...formData,
         price: parseFloat(formData.price),
-        category: formData.category.trim(), // Ensure category is trimmed and saved
+        category: formData.category.trim(),
       };
 
       if (editingFood) {
@@ -112,7 +103,6 @@ const MenuManagement = () => {
         await api.post('/foods', foodData);
       }
 
-      // Reset form and refresh list
       resetForm();
       fetchFoods();
     } catch (err) {
@@ -121,7 +111,6 @@ const MenuManagement = () => {
     }
   };
 
-  // Handle edit button click
   const handleEdit = (food) => {
     setEditingFood(food);
     setFormData({
@@ -136,7 +125,6 @@ const MenuManagement = () => {
     setShowForm(true);
   };
 
-  // Handle delete button click
   const handleDelete = async (foodId) => {
     if (!window.confirm('Are you sure you want to delete this item?')) {
       return;
@@ -151,7 +139,6 @@ const MenuManagement = () => {
     }
   };
 
-  // Reset form
   const resetForm = () => {
     setFormData({
       name: '',

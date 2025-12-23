@@ -32,7 +32,6 @@ const DashboardHome = () => {
     try {
       setIsLoading(true);
 
-      // Single source of truth: backend aggregation
       const overviewResp = await api.get('/orders/analytics/overview?days=7');
       const overview = overviewResp.data;
 
@@ -45,7 +44,7 @@ const DashboardHome = () => {
         cancelledOrders: overview.kpis?.cancelledOrders || 0
       });
 
-      // Fetch foods (menu stats still uses foods)
+      // Fetch foods
       const foodsResponse = await api.get('/foods');
       const allFoods = foodsResponse.data || [];
 
@@ -69,14 +68,12 @@ const DashboardHome = () => {
       
       setRecentOrders(recent);
 
-      // Menu stats
       const total = allFoods.length;
       const available = allFoods.filter(f => f.available !== false).length;
       const soldOut = total - available;
 
       setMenuStats({ total, available, soldOut });
 
-      // Generate alerts
       const newAlerts = [];
       const oldPendingOrders = allOrders.filter(order => {
         if (order.status !== 'pending') return false;
@@ -103,7 +100,6 @@ const DashboardHome = () => {
 
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
-      // No fake numbers: show empty states instead
       setKpis({ todayRevenue: 0, ordersToday: 0, pendingOrders: 0, cancelledOrders: 0 });
       setRecentOrders([]);
       setMenuStats({ total: 0, available: 0, soldOut: 0 });

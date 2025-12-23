@@ -1,7 +1,6 @@
 import React from 'react';
 import './StatusToggle.css';
 
-// Status flow: Pending → Preparing → Delivering → Completed
 const STATUS_ORDER = ['pending', 'preparing', 'delivering', 'completed'];
 const STATUS_LABELS = {
   pending: 'Pending',
@@ -22,21 +21,19 @@ const STATUS_COLORS = {
 const StatusToggle = ({ status, onStatusChange, orderId }) => {
   const handleToggle = () => {
     if (status === 'cancelled' || status === 'completed') {
-      return; // Can't toggle cancelled or completed orders
+      return;
     }
 
     // Map current status to next in sequence
     let currentIndex = STATUS_ORDER.indexOf(status);
     
-    // Default to pending if unknown
     if (currentIndex === -1) {
       currentIndex = 0;
     }
-
-    // Only advance forward, don't cycle
+    //move fordward only
     const nextIndex = currentIndex + 1;
     if (nextIndex >= STATUS_ORDER.length) {
-      return; // Already at the end
+      return;
     }
     
     const nextStatus = STATUS_ORDER[nextIndex];

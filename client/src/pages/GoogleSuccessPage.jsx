@@ -39,17 +39,16 @@ const GoogleSuccessPage = () => {
 
     // Persist auth info like other login paths
     localStorage.setItem('authToken', token);
-    // Fetch real profile from backend (includes id, authProvider, phone, address)
     authAPI.getProfile()
       .then((resp) => {
         localStorage.setItem('user', JSON.stringify(resp.data));
       })
       .catch(() => {
-        // fallback: keep minimal info so app doesn't crash
+        //keep minimal info so app doesn't crash
         localStorage.setItem('user', JSON.stringify({ role }));
       })
       .finally(() => {
-        // Check if there's a redirect path stored (e.g., from checkout)
+        // Check if there's a redirect path stored
         const redirectAfterLogin = localStorage.getItem('redirectAfterLogin');
         let redirectPath;
         
@@ -57,11 +56,11 @@ const GoogleSuccessPage = () => {
           localStorage.removeItem('redirectAfterLogin');
           redirectPath = redirectAfterLogin;
         } else {
-          // Redirect based on role: admins go to admin dashboard, users go to menu
+          //admins go to dashboard, users go to menu
           redirectPath = role === 'admin' ? '/admin-dashboard' : '/menu';
         }
         
-        // After storing, reload app so AuthContext picks it up on mount
+        // reload app so AuthContext picks it up on mount
         window.location.href = redirectPath;
       });
 

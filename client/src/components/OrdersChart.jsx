@@ -19,7 +19,6 @@ const OrdersChart = ({ data }) => {
     );
   }
 
-  // data is an array of { date: string, orders: number }
   const maxOrders = Math.max(...safeData.map(d => Number(d.orders) || 0), 1);
   const chartHeight = 200;
 

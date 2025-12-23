@@ -1,12 +1,9 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
-// Create context
 const CartContext = createContext();
 
-// Cart Provider Component
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
-    // Load cart from localStorage on mount
     const savedCart = localStorage.getItem('cartItems');
     return savedCart ? JSON.parse(savedCart) : [];
   });
@@ -18,18 +15,17 @@ export const CartProvider = ({ children }) => {
 
   // Add item to cart
   const addToCart = (food) => {
-    // Prevent adding unavailable items
     if (food.available === false) {
       console.warn('Cannot add unavailable item to cart:', food.name);
       return;
     }
 
     setCartItems((prevItems) => {
-      // Check if item already exists in cart
+      // Check if item exists in cart
       const existingItem = prevItems.find((item) => item.id === food.id);
 
       if (existingItem) {
-        // If item exists, increase quantity (only if still available)
+        // If item exists, increase quantity 
         if (existingItem.available === false) {
           return prevItems; // Don't update if unavailable
         }
@@ -48,7 +44,7 @@ export const CartProvider = ({ children }) => {
             price: food.price,
             image: food.image,
             category: food.category,
-            available: food.available !== false, // Ensure available flag is set
+            available: food.available !== false,
             quantity: 1,
           },
         ];
@@ -56,14 +52,12 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  // Remove item from cart
   const removeFromCart = (foodId) => {
     setCartItems((prevItems) =>
       prevItems.filter((item) => item.id !== foodId)
     );
   };
 
-  // Update item quantity
   const updateQuantity = (foodId, quantity) => {
     if (quantity <= 0) {
       removeFromCart(foodId);
@@ -77,7 +71,6 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  // Increase quantity
   const increaseQuantity = (foodId) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
@@ -88,7 +81,6 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  // Decrease quantity
   const decreaseQuantity = (foodId) => {
     setCartItems((prevItems) => {
       const item = prevItems.find((i) => i.id === foodId);
@@ -105,22 +97,19 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  // Clear cart
   const clearCart = () => {
     setCartItems([]);
   };
 
-  // Calculate total
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
-  // Calculate item count
   const getItemCount = () => {
     return cartItems.reduce((count, item) => count + item.quantity, 0);
   };
 
-  // Merge items into cart (used for merging guest cart after login)
+  // after login merge items into cart
   const mergeCartItems = (itemsToMerge) => {
     setCartItems((prevItems) => {
       const merged = [...prevItems];
@@ -129,7 +118,7 @@ export const CartProvider = ({ children }) => {
         const existingItem = merged.find((item) => item.id === newItem.id);
         
         if (existingItem) {
-          // Merge quantities if item already exists
+          // merge quantities if item already
           existingItem.quantity += newItem.quantity;
         } else {
           // Add new item
@@ -169,7 +158,6 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use cart context
 export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) {

@@ -29,7 +29,6 @@ const RegisterPage = () => {
       [name]: value,
     }));
 
-    // Check password match
     if (name === 'confirmPassword' || name === 'password') {
       const newFormData = { ...formData, [name]: value };
       setPasswordMatch(newFormData.password === newFormData.confirmPassword);

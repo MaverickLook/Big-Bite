@@ -10,10 +10,8 @@ import { sendPasswordResetEmail, getEmailConfigStatus } from "../utils/emailServ
 
 const router = express.Router();
 
-// TEST EMAIL CONFIGURATION (Admin only - for debugging)
 router.get("/test-email-config", authMiddleware, async (req, res) => {
   try {
-    // Only allow admins to check email config
     if (req.user.role !== "admin") {
       return res.status(403).json({ message: "Admin access required" });
     }
@@ -38,7 +36,6 @@ router.get("/test-email-config", authMiddleware, async (req, res) => {
   }
 });
 
-// REGISTER
 router.post("/register", async (req, res) => {
   try {
     const { name, email, password, phoneNumber, deliveryAddress } = req.body;
@@ -83,7 +80,6 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// LOGIN
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -92,7 +88,6 @@ router.post("/login", async (req, res) => {
     if (!foundUser)
       return res.status(404).json({ message: "User not found" });
 
-    // If user is Google-only (no password), block local login
     if (!foundUser.password) {
       return res.status(400).json({ message: "Please sign in with Google" });
     }
@@ -101,7 +96,6 @@ router.post("/login", async (req, res) => {
     if (!match)
       return res.status(400).json({ message: "Wrong password" });
 
-    // Backfill authProvider for existing users
     if (!foundUser.authProvider) {
       foundUser.authProvider = foundUser.googleId ? "google" : "local";
       await foundUser.save();
@@ -131,7 +125,6 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// GET PROFILE (Protected)
 router.get("/profile", authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
@@ -157,7 +150,7 @@ router.get("/profile", authMiddleware, async (req, res) => {
   }
 });
 
-// UPDATE PROFILE (Protected)
+//update profile
 router.put("/profile", authMiddleware, async (req, res) => {
   try {
     const { name, phoneNumber, deliveryAddress } = req.body;
@@ -168,11 +161,9 @@ router.put("/profile", authMiddleware, async (req, res) => {
     if (typeof phoneNumber === "string") user.phoneNumber = phoneNumber.trim();
     if (typeof deliveryAddress === "string") user.deliveryAddress = deliveryAddress.trim();
 
-    // Keep legacy fields in sync (optional)
     user.phone = user.phoneNumber;
     user.address = user.deliveryAddress;
 
-    // Ensure authProvider is set
     if (!user.authProvider) user.authProvider = user.googleId ? "google" : "local";
 
     await user.save();
@@ -191,7 +182,6 @@ router.put("/profile", authMiddleware, async (req, res) => {
   }
 });
 
-// FORGOT PASSWORD
 router.post("/forgot-password", async (req, res) => {
   try {
     const { email } = req.body;
@@ -207,7 +197,6 @@ router.post("/forgot-password", async (req, res) => {
       return res.status(400).json({ message: "Email is required" });
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       console.log('✗ Validation failed: Invalid email format');
@@ -218,8 +207,6 @@ router.post("/forgot-password", async (req, res) => {
       const user = await User.findOne({ email });
       console.log('User lookup:', user ? '✓ Found' : '✗ Not found');
 
-      // Always return success to prevent email enumeration
-      // If user exists, send reset email; if not, still return success
       if (user && user.authProvider === "local" && user.password) {
         console.log('✓ Valid user found (local auth with password)');
         
@@ -227,12 +214,10 @@ router.post("/forgot-password", async (req, res) => {
           // Generate reset token (raw token for email, will be hashed before storing)
           const rawToken = crypto.randomBytes(32).toString("hex");
           const resetTokenExpiry = new Date();
-          resetTokenExpiry.setHours(resetTokenExpiry.getHours() + 1); // Token expires in 1 hour
+          resetTokenExpiry.setHours(resetTokenExpiry.getHours() + 1);
 
-          // Hash token before storing (security best practice)
           const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
 
-          // Save hashed token to user
           user.resetToken = hashedToken;
           user.resetTokenExpiry = resetTokenExpiry;
           await user.save();
@@ -243,18 +228,15 @@ router.post("/forgot-password", async (req, res) => {
           console.log('Token expires at:', resetTokenExpiry.toISOString());
           console.log('Time difference (minutes):', ((resetTokenExpiry - new Date()) / 1000 / 60).toFixed(2));
 
-          // Send reset email with raw token (email contains raw token, DB stores hash)
           try {
             console.log('Attempting to send email...');
             await sendPasswordResetEmail(user.email, rawToken, user.name);
             console.log('✓ Email send completed successfully');
           } catch (emailError) {
             console.error("✗ Error sending reset email:", emailError.message);
-            // Don't throw - still return success to user
           }
         } catch (saveError) {
           console.error("✗ Error saving reset token:", saveError.message);
-          // Continue and return success anyway
         }
       } else {
         if (user) {
@@ -263,10 +245,8 @@ router.post("/forgot-password", async (req, res) => {
       }
     } catch (dbError) {
       console.error("✗ Database error in forgot-password:", dbError.message);
-      // Continue and return success anyway to prevent information leakage
     }
 
-    // Always return the same message regardless of whether user exists or errors occur
     console.log('✓ Returning success response');
     console.log('================================\n');
     return res.json({
@@ -274,14 +254,12 @@ router.post("/forgot-password", async (req, res) => {
     });
   } catch (err) {
     console.error("✗ Unexpected error in forgot-password:", err);
-    // Even on unexpected errors, return success to prevent information leakage
     return res.json({
       message: "If an account with that email exists, we've sent a reset link."
     });
   }
 });
 
-// RESET PASSWORD
 router.post("/reset-password", async (req, res) => {
   try {
     const { token, password } = req.body;
@@ -305,14 +283,12 @@ router.post("/reset-password", async (req, res) => {
       return res.status(400).json({ message: "Password must be at least 6 characters long" });
     }
 
-    // Hash the provided token to compare with stored hash
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
     console.log('Hashed token for lookup:', hashedToken.substring(0, 16) + '...');
 
-    // Find user with valid reset token (compare hashed tokens)
     const user = await User.findOne({
       resetToken: hashedToken,
-      resetTokenExpiry: { $gt: new Date() } // Token must not be expired
+      resetTokenExpiry: { $gt: new Date() }
     });
 
     // Debug: Log token validation
@@ -320,7 +296,6 @@ router.post("/reset-password", async (req, res) => {
     console.log('Token lookup at:', currentTime.toISOString());
     
     if (!user) {
-      // Log why token failed
       const userWithToken = await User.findOne({ resetToken: hashedToken });
       if (userWithToken) {
         console.log('⚠️  Token found but expired');
@@ -336,10 +311,8 @@ router.post("/reset-password", async (req, res) => {
 
     console.log('✓ Valid token found for user:', user.email);
 
-    // Hash new password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Update user password and clear reset token (invalidate after use)
     user.password = hashedPassword;
     user.resetToken = undefined;
     user.resetTokenExpiry = undefined;
@@ -357,7 +330,6 @@ router.post("/reset-password", async (req, res) => {
   }
 });
 
-// LOGOUT (Optional / no-op for JWT)
 router.post("/logout", (_req, res) => {
   res.json({ message: "Logged out" });
 });

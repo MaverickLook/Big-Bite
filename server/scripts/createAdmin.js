@@ -9,11 +9,9 @@ import { MONGO_URI } from "../config/env.js";
 
 const createAdmin = async () => {
   try {
-    // Connect to MongoDB
     await mongoose.connect(MONGO_URI);
     console.log("Connected to MongoDB");
 
-    // Get email from command line argument
     const email = process.argv[2];
     
     if (!email) {
@@ -22,17 +20,14 @@ const createAdmin = async () => {
       process.exit(1);
     }
 
-    // Check if user exists
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      // Update existing user to admin
       existingUser.role = "admin";
       await existingUser.save();
       console.log(`✅ User ${email} has been promoted to admin!`);
     } else {
-      // Create new admin user (requires password)
-      const password = process.argv[3] || "admin123"; // Default password or from argument
+      const password = process.argv[3] || "admin123";
       const hashedPassword = await bcrypt.hash(password, 10);
       
       const newAdmin = new User({

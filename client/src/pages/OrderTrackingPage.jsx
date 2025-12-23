@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const OrderTrackingPage = () => {
-  // TODO: Get order data from backend/context
+  //Get order data from backend
   const [order] = useState({
     orderId: '#12345',
     status: 'out_for_delivery', // pending, confirmed, preparing, out_for_delivery, delivered

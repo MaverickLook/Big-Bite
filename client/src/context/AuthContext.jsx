@@ -1,8 +1,6 @@
 import React, { createContext, useState, useContext, useEffect, useCallback, useMemo } from 'react';
-// Switched from mock auth to real backend API
 import { authAPI } from '../services/api';
 
-// Create context
 const AuthContext = createContext();
 
 // Auth Provider Component
@@ -32,7 +30,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, [persistUser]);
 
-  // Check if token exists on mount and fetch profile from backend
   useEffect(() => {
     const savedToken = localStorage.getItem('authToken');
     const savedUser = localStorage.getItem('user');
@@ -45,18 +42,15 @@ export const AuthProvider = ({ children }) => {
         setUser(JSON.parse(savedUser));
       }
 
-      // Always refresh from backend to ensure data is real + up-to-date
       refreshProfile();
     }
   }, [refreshProfile]);
 
-  // Login function
   const login = async (email, password) => {
     setIsLoading(true);
     setError(null);
     
     try {
-      // Call real backend API
       const response = await authAPI.login(email, password);
       const { token: authToken, user: userData } = response.data;
 
@@ -84,7 +78,6 @@ export const AuthProvider = ({ children }) => {
     setError(null);
     
     try {
-      // Call real backend API
       const response = await authAPI.register(name, email, password);
       const { token: authToken, user: userData } = response.data;
 
@@ -112,7 +105,6 @@ export const AuthProvider = ({ children }) => {
     
     try {
       await authAPI.logout().catch(() => {
-        // If backend doesn't implement logout yet, just proceed locally
         return;
       });
     } catch (err) {
@@ -130,7 +122,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Clear error
   const clearError = useCallback(() => setError(null), []);
 
   const updateProfile = useCallback(async ({ name, phoneNumber, deliveryAddress }) => {

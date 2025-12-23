@@ -5,9 +5,6 @@ import { authMiddleware, adminMiddleware } from "../middleware/auth.js";
 
 const router = express.Router();
 
-/**
- * Helper: allowed order statuses
- */
 const ALLOWED_STATUS = [
   "pending",
   "preparing",
@@ -16,27 +13,17 @@ const ALLOWED_STATUS = [
   "cancelled",
 ];
 
-/**
- * Helper: strict forward-only lifecycle
- * Pending → Preparing → Delivering → Completed
- */
 const STATUS_FLOW = ["pending", "preparing", "delivering", "completed"];
 
 const getAllowedNextStatuses = (currentStatus) => {
   if (currentStatus === "cancelled" || currentStatus === "completed") return [];
   if (currentStatus === "pending") return ["preparing", "cancelled"];
   const idx = STATUS_FLOW.indexOf(currentStatus);
-  if (idx === -1) return []; // unknown/legacy status: reject to be safe
+  if (idx === -1) return [];
   const next = STATUS_FLOW[idx + 1];
   return next ? [next] : [];
 };
 
-/**
- * @route   GET /api/orders/analytics/overview
- * @desc    Admin analytics (single source of truth)
- * @query   days (default 7)
- * @returns kpis + statusCounts + lastNDays series
- */
 router.get("/analytics/overview", authMiddleware, adminMiddleware, async (req, res) => {
   try {
     const days = Math.min(Math.max(parseInt(req.query.days || "7", 10), 1), 30);
@@ -51,7 +38,6 @@ router.get("/analytics/overview", authMiddleware, adminMiddleware, async (req, r
       .sort({ createdAt: 1 })
       .lean();
 
-    // Status counts (all-time from this window)
     const statusCounts = {
       pending: 0,
       preparing: 0,
@@ -60,11 +46,9 @@ router.get("/analytics/overview", authMiddleware, adminMiddleware, async (req, r
       cancelled: 0,
     };
 
-    // Revenue metrics (completed-only, consistent and trustworthy)
     let totalRevenue = 0;
     let completedOrders = 0;
 
-    // Prepare empty series map for last N days
     const seriesMap = new Map();
     for (let i = 0; i < days; i++) {
       const d = new Date(start);
@@ -75,7 +59,6 @@ router.get("/analytics/overview", authMiddleware, adminMiddleware, async (req, r
       seriesMap.set(key, { date: label, orders: 0, revenue: 0 });
     }
 
-    // Get today's date key (last day in the series)
     const todayKey = end.toISOString().slice(0, 10);
 
     for (const o of orders) {
@@ -85,12 +68,10 @@ router.get("/analytics/overview", authMiddleware, adminMiddleware, async (req, r
       const created = new Date(o.createdAt);
       const dayKey = created.toISOString().slice(0, 10);
 
-      // orders trend: count non-cancelled orders
       if (status !== "cancelled" && seriesMap.has(dayKey)) {
         seriesMap.get(dayKey).orders += 1;
       }
 
-      // revenue trend: completed-only
       if (status === "completed") {
         const price = Number(o.totalPrice || 0);
         if (seriesMap.has(dayKey)) seriesMap.get(dayKey).revenue += price;
@@ -101,9 +82,6 @@ router.get("/analytics/overview", authMiddleware, adminMiddleware, async (req, r
 
     const lastNDays = Array.from(seriesMap.values());
 
-    // Calculate Revenue Today: Sum of orders COMPLETED today (not created today)
-    // Since we don't have completedAt, we use updatedAt as a proxy
-    // When status changes to "completed", updatedAt is updated
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
     const todayEnd = new Date();
@@ -122,13 +100,11 @@ router.get("/analytics/overview", authMiddleware, adminMiddleware, async (req, r
       revenueToday += price;
     }
 
-    // Debug logging (non-sensitive data only)
     console.log(`[Analytics] Revenue Today Calculation:`);
     console.log(`  - Completed orders today: ${completedOrderCountToday}`);
     console.log(`  - Revenue Today: NT$${revenueToday.toFixed(2)}`);
     console.log(`  - Date range: ${todayStart.toISOString()} to ${todayEnd.toISOString()}`);
 
-    // Get today's orders count from the series (last day in the window)
     const todayData = seriesMap.get(todayKey) || { orders: 0, revenue: 0 };
     const ordersToday = todayData.orders;
 
@@ -152,11 +128,6 @@ router.get("/analytics/overview", authMiddleware, adminMiddleware, async (req, r
   }
 });
 
-/**
- * @route   POST /api/orders
- * @desc    Create a new order (logged-in user)
- * @body    { items: [{ foodId, quantity }] }
- */
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const { items, deliveryAddress, phoneNumber, recipientName } = req.body;
@@ -221,12 +192,6 @@ router.post("/", authMiddleware, async (req, res) => {
   }
 });
 
-/**
- * @route   GET /api/orders/user/:id
- * @desc    Get all orders of a user
- *          - user can see their own orders
- *          - admin can see anyone's orders
- */
 router.get("/user/:id", authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
@@ -246,10 +211,6 @@ router.get("/user/:id", authMiddleware, async (req, res) => {
   }
 });
 
-/**
- * @route   GET /api/orders
- * @desc    Get all orders (admin only)
- */
 router.get("/", authMiddleware, adminMiddleware, async (req, res) => {
   try {
     const orders = await Order.find()
@@ -263,12 +224,6 @@ router.get("/", authMiddleware, adminMiddleware, async (req, res) => {
   }
 });
 
-/**
- * @route   GET /api/orders/:id
- * @desc    Get a single order by ID
- *          - user can see their own order
- *          - admin can see any order
- */
 router.get("/:id", authMiddleware, async (req, res) => {
   try {
     const order = await Order.findById(req.params.id)
@@ -278,7 +233,6 @@ router.get("/:id", authMiddleware, async (req, res) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    // Check if user has permission (own order or admin)
     if (req.user.role !== "admin" && order.user._id.toString() !== req.user.id) {
       return res.status(403).json({ message: "Not allowed to view this order" });
     }
@@ -290,11 +244,6 @@ router.get("/:id", authMiddleware, async (req, res) => {
   }
 });
 
-/**
- * @route   PUT /api/orders/:id/status
- * @desc    Update order status (admin only)
- * @body    { status }
- */
 router.put("/:id/status", authMiddleware, adminMiddleware, async (req, res) => {
   try {
     const { status } = req.body;
@@ -311,7 +260,6 @@ router.put("/:id/status", authMiddleware, adminMiddleware, async (req, res) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    // Completed or cancelled orders are read-only
     if (order.status === "completed" || order.status === "cancelled") {
       return res.status(400).json({
         message: "Order is read-only (completed or cancelled)",

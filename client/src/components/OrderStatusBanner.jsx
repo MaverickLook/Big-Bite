@@ -26,7 +26,6 @@ const OrderStatusBanner = () => {
       const response = await api.get(`/orders/user/${userId}`);
       const orders = response.data || [];
 
-      // Collect all active orders and sort newest first
       const allActive = orders
         .filter(o => o.status !== 'completed' && o.status !== 'cancelled')
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -42,7 +41,6 @@ const OrderStatusBanner = () => {
   }, [user]);
 
   useEffect(() => {
-    // Check if banner was collapsed in this session
     const collapsed = sessionStorage.getItem('orderBannerCollapsed');
     if (collapsed === 'true') {
       setIsCollapsed(true);
@@ -50,7 +48,6 @@ const OrderStatusBanner = () => {
 
     if (isAuthenticated && user?.id) {
       fetchCurrentOrder();
-      // Poll for updates every 10 seconds
       const interval = setInterval(() => {
         fetchCurrentOrder({ silent: true });
       }, 10000);
@@ -111,22 +108,18 @@ const OrderStatusBanner = () => {
     return texts[status] || 'Processing';
   };
 
-  // Don't show if loading without data
   if (isLoading && activeOrders.length === 0) {
     return null;
   }
 
-  // No active order for authenticated user
   if (activeOrders.length === 0) {
     return null;
   }
 
-  // Show active order banner
   const topOrder = activeOrders[0];
   const orderIdDisplay = `#${topOrder._id.toString().slice(-8).toUpperCase()}`;
   const estimatedDelivery = getEstimatedDelivery(topOrder);
 
-  // Collapsed state - minimal banner
   if (isCollapsed) {
     return (
       <div 
@@ -152,7 +145,6 @@ const OrderStatusBanner = () => {
     );
   }
 
-  // Expanded state - full banner
   return (
     <div className="order-banner active-order-banner expanded">
       <div className="order-banner-container">
@@ -170,7 +162,6 @@ const OrderStatusBanner = () => {
           </div>
         </div>
         
-        {/* Stacked orders list */}
         <div className="order-list">
           {activeOrders.map((order) => {
             const idDisplay = `#${order._id.toString().slice(-8).toUpperCase()}`;
@@ -200,7 +191,6 @@ const OrderStatusBanner = () => {
           })}
         </div>
         
-        {/* Bottom-center collapse toggle */}
         <button 
           className="btn-banner-collapse bottom-center" 
           onClick={handleCollapse}
