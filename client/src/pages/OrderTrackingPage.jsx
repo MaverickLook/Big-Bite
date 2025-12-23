@@ -1,21 +1,16 @@
 import React, { useState } from 'react';
 
 const OrderTrackingPage = () => {
-  //Get order data from backend
-  const [order] = useState({
-    orderId: '#12345',
-    status: 'out_for_delivery', // pending, confirmed, preparing, out_for_delivery, delivered
-    items: [
-      { id: 1, name: 'Margherita Pizza', quantity: 1, price: 12.99 },
-      { id: 2, name: 'Caesar Salad', quantity: 2, price: 8.99 },
-    ],
-    totalAmount: 30.97,
-    estimatedDelivery: '30-45 minutes',
-    orderTime: '2:15 PM',
-    deliveryAddress: '123 Main Street, Apt 4B',
-    deliveryPersonName: 'John Driver',
-    deliveryPersonPhone: '+1 (555) 123-4567',
-  });
+  const [order] = useState(null);
+
+  if (!order) {
+    return (
+      <div className="page-container">
+        <h1>📍 Track Your Delivery</h1>
+        <p>No order to display.</p>
+      </div>
+    );
+  }
 
   const statusSteps = [
     { key: 'pending', label: 'Order Placed', time: '2:15 PM' },
